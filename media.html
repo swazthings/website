@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>swaz things - media</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Monomakh&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inconsolata', monospace;
+            background: linear-gradient(to bottom, #000000, #2f2f2f);
+            color: #ffffff;
+            background-image: url('https://swazcomics.neocities.org/dbd.png');
+            background-repeat: repeat;
+            margin: 0;
+            padding: 0;
+        }
+
+        .monomakh-text {
+            font-family: 'Monomakh', serif;
+        }
+
+        /* custom styling for the "shelf" containers */
+        .shelf-container {
+        background-color: #1a1a1a;
+        border-radius: 0;
+        box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.2);
+        position: relative;
+        width: 100%;
+        max-width: 1050px;
+        min-height: 275px;
+        margin-left: auto;
+        margin-right: auto;
+        }
+        .shelf-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+            border-radius: 0;
+        }
+        .shelf {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x proximity;
+            scroll-padding: 0 32px;
+            -webkit-overflow-scrolling: touch;
+            padding: 24px 32px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            align-items: center;
+        }
+        .shelf-container .shelf::-webkit-scrollbar {
+            display: none;
+        }
+        .shelf-item {
+            flex-shrink: 0;
+            width: 150px;
+            scroll-snap-align: start;
+            transition: none;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .book-item {
+            flex-shrink: 0;
+            width: 150px;
+            height: 225px; 
+            scroll-snap-align: start;
+            transition: none;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .book-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .music-item {
+            width: 200px;
+        }
+        .shelf-item img {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .inconsolata-text {
+            font-family: 'Inconsolata', monospace;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-fade-in {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .footer-fade-in {
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            padding: 40px;
+            border-radius: 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            width: 700px;
+            text-align: left;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+            font-family: 'Space Mono', sans-serif;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+
+        .close-button:hover {
+            color: #fff;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center">
+    
+    <!-- a dark overlay for the background image -->
+    <div class="fixed inset-0 bg-black/50 z-0"></div>
+
+    <!-- main content container with fade-in effect -->
+    <div class="relative z-10 flex flex-col items-center text-center px-4 pt-8 max-w-7xl w-full flex-grow opacity-0 content-fade-in">
+
+        <!-- library title -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-widest mb-2">sai's media collection</h1>
+        <h2 class="text-lg sm:text-xl md:text-2xl font-light mb-8">this is an online collection of some of my personal favourite books, videos and albums.<br>click on an item to view details about it.</h2>
+
+        <!-- section for books -->
+        <!-- updated to have consistent spacing of 32px below -->
+        <div class="w-full mb-8">
+            <h2 class="inconsolata-text text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">books (and other serialized print content)</h2>
+            <div class="shelf-container border border-white">
+                <div class="shelf">
+                    <!-- book shelf items -->
+                    <div class="book-item" data-item-id="book1">
+                        <img src="https://m.media-amazon.com/images/I/81jlmEGX3aL._UF1000,1000_QL80_.jpg" class="border-2 border-white">
+                        <p class="mt-2 text-sm">lightseekers</p>
+                    </div>
+                    <div class="book-item" data-item-id="book2">
+                        <img src="https://swazcomics.neocities.org/josephanton.png" class="border-2 border-white">
+                        <p class="mt-2 text-sm">joseph anton</p>
+                    </div>
+                    <div class="book-item" data-item-id="book3">
+                        <img src="https://m.media-amazon.com/images/I/81seEfVrqoL._UF1000,1000_QL80_.jpg" alt="to kill a mockingbird book cover" class="border-2 border-white">
+                        <p class="mt-2 text-sm">great glass elevator</p>
+                    </div>
+                    <div class="book-item" data-item-id="book4">
+                        <img src="https://i.pinimg.com/564x/37/2a/fe/372afe47cbfc705eccf63cba9fb35820.jpg" class="border-2 border-white">
+                        <p class="mt-2 text-sm">one piece</p>
+                    </div>
+                    <div class="book-item" data-item-id="book5">
+                        <img src="https://swazcomics.neocities.org/jawn.png" class="border-2 border-white">
+                        <p class="mt-2 text-sm">tinkle</p>
+                    </div>
+                    <div class="book-item" data-item-id="book6">
+                        <img src="https://swazcomics.neocities.org/peanuts.png" class="border-2 border-white">
+                        <p class="mt-2 text-sm">peanuts</p>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- section for movies and digital media -->
+        <!-- updated to have consistent spacing of 32px below -->
+        <div class="w-full mb-8">
+            <h2 class="inconsolata-text text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">movies, shows and other digital media</h2>
+            <div class="shelf-container border border-white">
+                <div class="shelf">
+                    <!-- example movie shelf items -->
+                    <div class="shelf-item" data-item-id="movie1">
+                        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQkT9rl5hwlm0ot-w8uOIEqBh6XZbJLnnMNl1G4Ry5zZE5-RDZfPD87ROEL6kxluWc1hvB4zg" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">gods</p>
+                    </div>
+                    <div class="shelf-item" data-item-id="movie2">
+                        <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQoYjLSrB31aVvik3mfbRBI7fpVJsU--4jcfYUK_NOVvUQ5ZuvwF9z00HbbI3KGVxQ72rcr1A" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">vinland saga</p>
+                    </div>
+                    <div class="shelf-item" data-item-id="movie3">
+                        <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQFPaS5RyGmBuMRKAWvbKox-wYy0XzTP0OK0RV8xHiIlEj8mLcLuZwuPKUsTJgJkdXSBxAE" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">jujutsu kaisen</p>
+                    </div>
+                    <div class="shelf-item" data-item-id="movie4">
+                        <img src="https://resizing.flixster.com/AWhklm6QkZfQWra2v0lV0VQ_HVY=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNzU2ZTMxZmEtODlmZC00NDk5LWJlMDAtNWY1OWIwZjYwNDgxLnBuZw==" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">ted lasso</p>
+                    </div>
+                    <div class="shelf-item" data-item-id="movie5">
+                        <img src="https://a.ltrbxd.com/resized/film-poster/1/2/9/6/4/5/2/1296452-bata-boy-and-crocs-girl-0-230-0-345-crop.jpg?v=3b5189041d" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">bata boy & crocs girl</p>
+                    </div>
+                    <div class="shelf-item" data-item-id="movie6">
+                        <img src="https://a.ltrbxd.com/resized/film-poster/6/6/3/6/7/9/663679-history-of-the-entire-world-i-guess-0-230-0-345-crop.jpg?v=c8b3ba689e" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">history</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full mb-8">
+            <h2 class="inconsolata-text text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">albums</h2>
+            <div class="shelf-container border border-white">
+                <div class="shelf">
+                    <div class="shelf-item music-item" data-item-id="hey-u-x-album">
+                        <img src="https://images.genius.com/489c1d5c00dacba52b0375607e653213.1000x1000x1.png" alt="hey u x album cover" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">hey u x</p>
+                    </div>
+                    <div class="shelf-item music-item" data-item-id="igor-album">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/5/51/Igor_-_Tyler%2C_the_Creator.jpg" alt="igor album cover" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">igor</p>
+                    </div>
+                    <div class="shelf-item music-item" data-item-id="modal-soul-album">
+                        <img src="https://m.media-amazon.com/images/I/51g8QBRCkvL._UF1000,1000_QL80_.jpg" alt="modal soul album cover" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">modal soul</p>
+                    </div>
+                    <div class="shelf-item music-item" data-item-id="starboy-album">
+                        <img src="https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png" alt="starboy album cover" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">starboy</p>
+                    </div>
+                    <div class="shelf-item music-item" data-item-id="racine-carree-album">
+                        <img src="https://i1.sndcdn.com/artworks-ABFvOreExOt4-0-t500x500.jpg" alt="racine carrée album cover" class="w-full h-auto border-2 border-white">
+                        <p class="mt-2 text-sm">racine carrée</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full border-gray-500 my-8 max-w-3xl opacity-0 content-fade-in">
+        <footer class="w-full flex flex-col items-center pb-8 opacity-0 footer-fade-in monomakh-text">
+            <p class="text-xs sm:text-sm md:text-base tracking-widest font-light mb-4">
+                swaz things (a website by sai srinivas)
+            </p>
+            <nav class="flex text-sm sm:text-base md:text-lg tracking-widest font-light">
+                <a href="index.html" class="hover:text-gray-400 transition-colors duration-200 px-2 uppercase">home</a>
+                <span class="px-2">·</span>
+                <a href="blog.html" class="hover:text-gray-400 transition-colors duration-200 px-2 uppercase">blog</a>
+            <span class="px-2">·</span>
+                <a href="media.html" class="text-gray-400 transition-colors duration-200 px-2 uppercase">media</a>
+                <span class="px-2">·</span>
+                <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2 uppercase">projects</a>
+                <span class="px-2">·</span>
+                <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2 uppercase">pictures</a>
+                <span class="px-2">·</span>
+                <a href="about.html" class="hover:text-gray-400 transition-colors duration-200 px-2 uppercase">about</a>
+            </nav>
+        </footer>
+    </div>
+    <div id="item-modal" class="modal-overlay">
+        <div class="modal-content relative flex flex-col items-start gap-6">
+            <button id="close-modal" class="close-button">&times;</button>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 w-full">
+                <img id="modal-image" class="w-64 h-auto border-2 border-white flex-shrink-0">
+                <div class="text-left mt-4 md:mt-0 flex-grow">
+                    <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
+                    <p id="modal-description" class="text-sm text-gray-400"></p>
+
+                    <!-- container for album details, only visible for music items -->
+                    <div id="album-details-container" class="mt-4 text-sm">
+                        <h3 class="text-xl font-bold text-white mb-2">album specs</h3>
+                        <p><span class="text-gray-400">runtime:</span> <span id="album-runtime"></span></p>
+                        <p><span class="text-gray-400">most popular track:</span> <span id="album-popular-track"></span></p>
+                        <p><span class="text-gray-400">my favourite track:</span> <span id="album-favorite-track"></span></p>
+                        <p><span class="text-gray-400">notable features:</span> <span id="album-featured-artists"></span></p>
+                        <p><span class="text-gray-400">my rating:</span> <span id="album-rating"></span></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        
+        const itemsData = {
+            'book1': {
+                title: 'lightseekers (femi kayode, 2021)',
+                description: "the literary debut of nigerian author femi kayode, this novel follows philip taiwo, an investigative psychologist who travels to a remote southern town in nigeria called okriki in order to uncover the truth about the brutal murder of three university students, of which footage goes viral online. the story is based on the real life 'aluu four' lynching incident in port harcourt, nigeria, where 4 university students were set ablaze and killed on charges of theft. 'lightseekers' is a gripping novel that manages to effectively combine elements of romance and comedy with crime, and that's why i highly recommend it.",
+                image: 'https://m.media-amazon.com/images/I/81jlmEGX3aL._UF1000,1000_QL80_.jpg',
+            },
+            'book2': {
+                title: 'joseph anton (salman rushdie, 2012)',
+                description: "this memoir by salman rushdie chronicles his life as he goes into hiding for 9 years after the release of his novel 'the satanic verses', and the subsequent fatwa issued by ayatollah khomeini. the book's title is derived from the pseudonym rushdie adopted while in hiding. the book is a powerful example of the unyielding human spirit and a bold statement that words are a potent force against oppression. my only problem with this book is that it could easily be shortened by a few hundred pages and still be just as good, if not even better. other than that, i still believe this book is worth your time.",
+                image: 'https://swazcomics.neocities.org/josephanton.png'
+            },
+            'book3': {
+                title: 'the great glass elevator (roald dahl, 1972)',
+                description: "this book by roald dahl is the sequel to 'charlie and the chocolate factory'. it continues the adventures of charlie, mr. wonka and the rest of the bucket family, as they venture into space in willy wonka's glass elevator. their ludicrous adventures in space include ending up inside the new space hotel sent by america, getting mistaken for a group of terrorists trying to bomb the space hotel by the american president and even fighting off vicious creatures named 'vermicious knids'. i enjoyed this book thoroughly, and i recommend this book if you want to read something humorous.",
+                image: 'https://m.media-amazon.com/images/I/81seEfVrqoL._UF1000,1000_QL80_.jpg'
+            },
+            'book4': {
+                title: 'one piece (eiichiro oda, since 1998)',
+                description: "one piece is the most popular and highest grossing manga series of all time, and its anime and movie adaptations are also loved worldwide. created in 1998 by eiichiro oda, the story follows monkey d. luffy, who ate a devil fruit as a child that gives him special powers but renders him unable to swim. his main goal is to become the king of the pirates and rule the grand line. so he assembles a crew called the 'straw hat pirates'. with his crewmates (including usoap, chopper, sanji and zoro) he fights off some of the strongest pirates on the grand line to increase the bounty on his head and become the greatest pirate of all time. the manga is really entertaining, and it shows that with teamwork and friendship, anything is possible.",
+                image: 'https://i.pinimg.com/564x/37/2a/fe/372afe47cbfc705eccf63cba9fb35820.jpg'
+            },
+            'book5': {
+                title: 'tinkle (amar chitra katha comics, since 1980)',
+                description: "tinkle is a beloved indian children's magazine that has mesmerized children like me across generations with comics, stories, puzzles, and general knowledge. founded in 1980 by anant pai, it features iconic characters like suppandi, shikari shambu, kalia the crow and tantri the mantri. i have good memories of reading tinkle comics from when i was younger, and i still enjoy reading them now. as you can probably tell by now, i have a massive collection of tinkle books. their publications such as tinkle digest, tinkle double digest, and the rather INGENIOUSLY named double double digest, are some of my favourite things to read. these comics have a special place in my heart.",
+                image: 'https://images.indianexpress.com/2020/11/Uncle-Pai-and-Toons_incopy.jpg'
+            },
+            'book6': {
+                title: 'peanuts (charles schulz, 1950-2000)',
+                description: "this iconic comic series follows the adventures of the round-headed kid charlie brown, famous for his persistent optimism despite constant failure. his pet dog snoopy, lucy, linus, peppermint patty and the rest of the 'peanuts gang' also play major roles in these comics. the strip, that holds the world record for the longest continuous story with over 17,000 daily serialized installments, has greatly influenced western pop culture, and has even been adapted into many emmy award-winning television specials. one of my favourite things about peanuts is snoopy's imagination, where he transforms into various alter-egos like the world war flying ace and joe cool. peanuts is a classic that has stood the test of time. the characters are relatable and charles schulz's unique art style and humour make these comics timeless.",
+                image: 'https:/swazcomics.neocities.org/snoopy.png'
+            },
+            'movie1': {
+                title: 'the gods must be crazy (1980)',
+                description: "an international co-production of south africa and botswana, 'the gods must be crazy' is my favourite movie of all time. starring n!xau ǂtoma, sandra prinsloo and marius weyers, the movie follows the story of a bushman in the kalahari desert and his journey to the end of the world to exterminate a coca-cola bottle that falls out of an airplane into his tribe's desert home, disturbing their peace. on his journey he even gets arrested, and encounters a group of terrorists who take a teacher and her class hostage from a village. it's just such a good movie with so many funny moments, that i can't really explain well using just a dialog box. you just have to watch the movie. it is absolutely perfect.",
+                image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQkT9rl5hwlm0ot-w8uOIEqBh6XZbJLnnMNl1G4Ry5zZE5-RDZfPD87ROEL6kxluWc1hvB4zg"
+            },
+            'movie2': {
+                title: 'vinland saga (2019-2023)',
+                description: "vinland saga is a historical fiction anime based on the manga of the same name by makoto yukimura. season 1 was animated by wit studio and season 2 was animated by mappa. it follows the journey of an icelandic explorer named thorfinn karlsefni. it documents how he went from an abrasive warmonger, seeking to avenge his dead father thors as a teenager, to a slave who remained calm in all circumstances despite having lost the will to live. i personally enjoyed the shift in pace as the show went from an action-packed thriller in season 1 to a more relaxed and philosophical season 2, as well as the historical aspects relating to the era of the vikings. overall, i think it's an amazing show.",
+                image: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQoYjLSrB31aVvik3mfbRBI7fpVJsU--4jcfYUK_NOVvUQ5ZuvwF9z00HbbI3KGVxQ72rcr1A"
+            },
+            'movie3': {
+                title: 'jujutsu kaisen (since 2020)',
+                description: 'this dark fantasy anime, adapted from the manga of the same name by gege akutami, follows the story of yuji itadori, a high school student whose life is turned upside down when he eats a cursed object, which turns out to be the finger of a powerful cursed spirit named ryomen sukuna. this event makes him a vessel for the spirit, and he is then swept into the world of jujutsu sorcerers, a powerful group of people who can use sorcery to eradicate cursed spirits from the world. he attempts to use his own cursed power for good, alongside other famous characters like gojo satoru and nobara kugisaki. the show is pretty enjoyable to watch. i especially liked the animation and sound design of this anime.',
+                image: 'https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQFPaS5RyGmBuMRKAWvbKox-wYy0XzTP0OK0RV8xHiIlEj8mLcLuZwuPKUsTJgJkdXSBxAE'
+            },
+            'movie4': {
+                title: 'ted lasso (since 2020)',
+                description: "this show follows the journey of an american football coach named ted lasso, who moves to the uk to manage a premier league team, afc richmond, despite having no prior experience with the sport of football. initially hired by the team's owner, rebecca welton, in a scheme to sabotage the club, ted's manages to win over his team through his relentlessly optimistic and kind attitude. this show conveys a powerful message that sport can bring communities together and foster kindness. the things i enjoyed most in this show are the team dynamics and the way people randomly start swearing at times in this show. i find it pretty unhinged, and that's why i like it. i think we can all learn something from ted lasso, even though he's just a fictional character. i admire his positive attitude.",
+                image: 'https://resizing.flixster.com/AWhklm6QkZfQWra2v0lV0VQ_HVY=/ems.cHJkLWVtcy1hc3NldHMvdHZzZXJpZXMvNzU2ZTMxZmEtODlmZC00NDk5LWJlMDAtNWY1OWIwZjYwNDgxLnBuZw=='
+            },
+            'movie5': {
+                title: 'bata boy and crocs girl (2025)',
+                description: 'this short film, approximately 38 minutes long, follows the story of gokul and ishita, a young couple trying to figure their lives out in bangalore. it is the directorial debut of nirmal pillai (known better online as mahlyf mahrulez), who also plays gokul in the film. i liked the way this film was directed, taking us through iconic places in bangalore while telling an incredibly well-written story of intimacy and youth, while simultaneously entertaining us with comedic snippets, placed in between these segments, from a podcast with gokul and ishita. i really enjoyed watching this film because it had me on the edge of my seat at every moment.',
+                image: 'https://a.ltrbxd.com/resized/film-poster/1/2/9/6/4/5/2/1296452-bata-boy-and-crocs-girl-0-230-0-345-crop.jpg?v=3b5189041d'
+            },
+            'movie6': {
+                title: 'history of the entire world, i guess (2017)',
+                description: "bill wurtz's most popular video is supposed to be a quick and humorous musical summary of everything from the beginning of the universe to the present day. and i must say, he did a great job at making it. it covers major events and eras, including the formation of the earth, the rise and fall of civilizations like the roman empire, the age of exploration, and the world wars. and it's all delivered with his signature weird animation style, catchy jingles, and unique sense of humour, condensing a massive amount of information into an entertaining experience that barely takes 20 minutes. it has also been made into a podcast episode on spotify, which i unironically listen to when i'm bored. that's why this video is my favourite video on youtube.",
+                image: 'https://a.ltrbxd.com/resized/film-poster/6/6/3/6/7/9/663679-history-of-the-entire-world-i-guess-0-230-0-345-crop.jpg?v=c8b3ba689e'
+            },
+            'hey-u-x-album': {
+                title: 'hey u x (benee, 2020)',
+                description: "the debut studio album by new zealand artist benee, this is one of my personal favourite albums. i personally enjoyed its eclectic style and benee's vocals.",
+                image: 'https://images.genius.com/489c1d5c00dacba52b0375607e653213.1000x1000x1.png',
+                runtime: '44:07',
+                popularTrack: 'supalonely (feat. gus dapperton)',
+                myFavoriteTrack: 'same effect',
+                featuredArtists: ['gus dapperton', 'lily allen', 'grimes'],
+                myRating: '9/10'
+            },
+            'igor-album': {
+                title: 'igor (tyler the creator, 2019)',
+                description: "tyler the creator's 6th studio album and his greatest work, 'igor' won the grammy in 2020 for 'best rap album'. this masterpiece of an album, fully produced and written by tyler himself, conveys the story of tyler's romantic feelings towards someone already in a relationship.",
+                image: 'https://upload.wikimedia.org/wikipedia/en/5/51/Igor_-_Tyler%2C_the_Creator.jpg',
+                runtime: '39:43',
+                popularTrack: 'earfquake',
+                myFavoriteTrack: 'new magic wand',
+                featuredArtists: ['playboi carti', 'lil uzi vert', 'kanye west'],
+                myRating: '9.5/10'
+            },
+            'modal-soul-album': {
+                title: 'modal soul (nujabes, 2005)',
+                description: "the last album released by japanese producer nujabes during his lifetime, this album really gives us a glimpse of nujabes' unique production style. it received critical acclaim for its notable jazz and soul influence.",
+                image: 'https://m.media-amazon.com/images/I/51g8QBRCkvL._UF1000,1000_QL80_.jpg',
+                runtime: '1:03:25',
+                popularTrack: 'luv(sic.) part 3 (feat. shing02)',
+                myFavoriteTrack: 'feather (feat. akin, cise starr)',
+                featuredArtists: ['cise starr', 'shing02', 'uyama hiroto'],
+                myRating: '8/10'
+            },
+            'starboy-album': {
+                title: 'starboy (the weeknd, 2016)',
+                description: 'the 3rd studio album by the weeknd, this is a pretty solid listen in my opinion. with hits such as "die for you", "starboy" and "sidewalks", as well as appearances from ariana grande, kygo and a$ap rocky on the deluxe version, this album shot the weeknd to global stardom.',
+                image: 'https://upload.wikimedia.org/wikipedia/en/3/39/The_Weeknd_-_Starboy.png',
+                runtime: '1:08:40',
+                popularTrack: 'starboy (feat. daft punk)',
+                myFavoriteTrack: 'secrets',
+                featuredArtists: ['daft punk', 'lana del rey', 'kendrick lamar'],
+                myRating: '8/10'
+            },
+            'racine-carree-album': {
+                title: 'racine carrée (stromae, 2013)',
+                description: "the 2nd studio album by belgian recording artist stromae, this is the first french album i listened to. i enjoyed stromae's production on this album and i think it does a wonderful job at exploring diverse themes such as genocide, social media addiction and the dangers of smoking.",
+                image: 'https://i1.sndcdn.com/artworks-ABFvOreExOt4-0-t500x500.jpg',
+                runtime: '45:31',
+                popularTrack: 'papaoutai',
+                myFavoriteTrack: 'ave cesaria',
+                featuredArtists: ['gims', 'orelsan'],
+                myRating: '8.5/10'
+            },
+        };
+
+        // get references to the elements
+        const shelfItems = document.querySelectorAll('.shelf-item, .book-item, .music-item');
+        const modal = document.getElementById('item-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDescription = document.getElementById('modal-description');
+
+        // get references to the new album detail elements
+        const albumDetailsContainer = document.getElementById('album-details-container');
+        const albumRuntime = document.getElementById('album-runtime');
+        const albumPopularTrack = document.getElementById('album-popular-track');
+        const albumFavoriteTrack = document.getElementById('album-favorite-track');
+        const albumFeaturedArtists = document.getElementById('album-featured-artists');
+        const albumRating = document.getElementById('album-rating');
+
+        // function to show the modal with item data
+        function showModal(item) {
+            modalImage.src = item.image;
+            modalImage.alt = item.title;
+            modalTitle.textContent = item.title;
+            modalDescription.textContent = item.description;
+
+            // check if the item is an album to show the additional details
+            if (item.runtime) {
+                albumDetailsContainer.classList.remove('hidden');
+                albumRuntime.textContent = item.runtime;
+                albumPopularTrack.textContent = item.popularTrack;
+                albumFavoriteTrack.textContent = item.myFavoriteTrack;
+                albumFeaturedArtists.textContent = item.featuredArtists.join(', ') || 'n/a';
+                albumRating.textContent = item.myRating;
+            } else {
+                albumDetailsContainer.classList.add('hidden');
+            }
+
+            modal.classList.add('active');
+        }
+
+        // function to hide the modal
+        function hideModal() {
+            modal.classList.remove('active');
+        }
+
+        // add click event listeners to each shelf item
+        shelfItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const itemId = item.dataset.itemId;
+                const itemData = itemsData[itemId];
+                if (itemData) {
+                    showModal(itemData);
+                }
+            });
+        });
+
+        // add click event listener to the close button
+        closeModalButton.addEventListener('click', hideModal);
+
+        // add click event listener to the modal overlay
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                hideModal();
+            }
+        });
+    </script>
+</body>
+</html>

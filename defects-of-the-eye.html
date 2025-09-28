@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>defects of the eye</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inconsolata Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Monomakh Font - Added for footer -->
+    <link href="https://fonts.googleapis.com/css2?family=Monomakh&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inconsolata', monospace;
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to bottom, #000000, #2f2f2f);
+            color: #ffffff; /* White text */
+            padding: 0.5rem;
+            box-sizing: border-box;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 95%;
+            max-width: 700px;
+            background-color: #000000; /* New black background for content */
+            border-radius: 0.5rem;
+            border: 2px solid #ffffff; /* Solid white border */
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1); /* Subtle white shadow */
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .condition-button {
+            background-color: #000000; /* Black fill */
+            color: #ffffff; /* White text */
+            border: 1px solid #ffffff; /* White border */
+            border-radius: 0.25rem;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            text-transform: lowercase;
+            flex-grow: 1;
+            max-width: 140px;
+            text-align: center;
+        }
+
+        .condition-button:hover {
+            background-color: #333333; /* Dark gray on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* White shadow */
+        }
+
+        .condition-button.active {
+            background-color: #ffffff; /* White background for active */
+            color: #000000; /* Black text for active */
+            box-shadow: 0 4-10px rgba(255, 255, 255, 0.2); /* White shadow */
+        }
+
+        /* Wrapper for the two images and their captions */
+        .image-caption-pair {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-basis: calc(50% - 0.25rem); /* Use flex-basis instead of width for flexbox */
+        }
+
+        .image-container-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 1rem;
+        }
+
+        /* Styling for individual images within the wrapper */
+        .image-container-wrapper img {
+            background-color: #000000; /* Default black background for image area */
+            border: 1px solid #333333; /* Dark gray border */
+            border-radius: 0.25rem;
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Style for white background images - this will override the default for specified images */
+        .image-container-wrapper img.white-background-image {
+            background-color: #ffffff; /* White background for specified images */
+        }
+
+        .image-caption {
+            font-size: 0.7rem;
+            color: #aaaaaa; /* Light gray for captions */
+            text-align: center;
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        /* Adjust width for single image display */
+        .image-container-wrapper.single-image .image-caption-pair {
+            flex-basis: 100%; /* Make the single image take up full width */
+            max-width: 100%;
+        }
+        .image-container-wrapper.single-image .image-caption-pair:nth-child(2) {
+            display: none;
+        }
+        .explanation-box {
+            background-color: #0d0d0d; /* Even darker for explanation box */
+            border: 1px solid #222222; /* Darker gray border */
+            border-radius: 0.25rem;
+            padding: 0.8rem;
+            width: 100%;
+            max-width: 600px;
+            min-height: 80px;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #cccccc; /* Light gray text */
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Define the Monomakh font class for the footer */
+        .monomakh-font {
+            font-family: 'Monomakh', serif;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .button-group {
+                gap: 0.4rem;
+            }
+            .condition-button {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.7rem;
+                flex-basis: calc(50% - 0.2rem);
+            }
+            .image-container-wrapper {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .image-caption-pair {
+                width: 100%;
+            }
+            .image-container-wrapper img {
+                height: 150px;
+            }
+            .explanation-box {
+                font-size: 0.9rem;
+                padding: 0.6rem;
+            }
+        }
+        /* Define the fade in animation for the content */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-fade-in {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .footer-fade-in {
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+    </style>
+</head>
+<body class="text-white min-h-screen flex flex-col justify-between items-center p-4">
+    <div class="w-full max-w-7xl mx-auto flex-grow flex flex-col items-center opacity-0 content-fade-in">
+        <h2 class="inconsolata-text text-2xl sm:text-3xl md:text-4xl font-bold uppercase tracking-widest my-8">defects of the eye</h2>
+        <div class="container">
+            <div class="button-group">
+                <button class="condition-button active" data-condition="normal">normal vision</button>
+                <button class="condition-button" data-condition="myopia">myopia</button>
+                <button class="condition-button" data-condition="hypermetropia">hypermetropia</button>
+                <button class="condition-button" data-condition="presbyopia">presbyopia</button>
+                <button class="condition-button" data-condition="astigmatism">astigmatism</button>
+                <button class="condition-button" data-condition="cataract">cataract</button>
+                <button class="condition-button" data-condition="colorblindness">color blindness</button>
+            </div>
+
+            <!-- Wrapper for two image elements and their captions -->
+            <div class="image-container-wrapper">
+                <div class="image-caption-pair">
+                    <img id="eyeDiagramImage1" src="" alt="Eye Condition Diagram 1">
+                    <div id="imageCaption1" class="image-caption"></div>
+                </div>
+                <div class="image-caption-pair">
+                    <img id="eyeDiagramImage2" src="" alt="Eye Condition Diagram 2">
+                    <div id="imageCaption2" class="image-caption"></div>
+                </div>
+            </div>
+
+            <div class="explanation-box" id="explanationBox">
+                <!-- Explanation will be loaded here by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- divider above footer -->
+    <hr class="w-full border-gray-500 my-8 max-w-3xl opacity-0 content-fade-in">
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const eyeDiagramImage1 = document.getElementById('eyeDiagramImage1');
+            const eyeDiagramImage2 = document.getElementById('eyeDiagramImage2');
+            const imageCaption1 = document.getElementById('imageCaption1');
+            const imageCaption2 = document.getElementById('imageCaption2');
+            const explanationBox = document.getElementById('explanationBox');
+            const buttons = document.querySelectorAll('.condition-button');
+            const imageContainerWrapper = document.querySelector('.image-container-wrapper'); // Get wrapper
+
+            // Data for each condition including image URLs, captions, and explanations
+            const conditionsData = {
+                normal: {
+                    title: "normal vision",
+                    description: "in normal vision, light rays entering the eye are perfectly focused on the retina, resulting in clear and sharp images. the cornea and lens work together to converge light precisely at the back of the eye.",
+                    imageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/95.png",
+                    caption1Text: "light focused on retina",
+                    secondImageUrl: "", // Empty for normal vision
+                    caption2Text: "" // Empty for normal vision
+                },
+                myopia: {
+                    title: "myopia",
+                    description: "also called nearsightedness, myopia occurs when the eyeball is too long or the cornea/lens is too curved, causing light rays to focus in front of the retina. distant objects appear blurry, while near objects may be clear. it is corrected with a concave (diverging) lens of suitable focal length.",
+                    imageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/96.png",
+                    caption1Text: "focus in front of retina",
+                    secondImageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/12-1.png",
+                    caption2Text: "myopia corrected with concave lens"
+                },
+                hypermetropia: {
+                    title: "hypermetropia",
+                    description: "also known as farsightedness or hyperopia, hypermetropia occurs when the eyeball is too short or the cornea/lens is too flat, causing light rays to focus behind the retina. near objects appear blurry, while distant objects may be clear. it is corrected by using a suitable convex (converging) lens.",
+                    imageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/98.png",
+                    caption1Text: "focus behind retina",
+                    secondImageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/13-1.png",
+                    caption2Text: "hypermetropia corrected with convex lens"
+                },
+                presbyopia: {
+                    title: "presbyopia",
+                    description: "presbyopia is a natural aging process where the ciliary muscles lose flexibility, making it difficult to focus on objects due to the lens not being able to move. it typically affects people over 40. it is typically corrected with reading glasses or bifocal lenses.",
+                    imageUrl: "https://t3.ftcdn.net/jpg/01/60/24/02/360_F_160240280_sxDQh3O97wv7Rp2IhH9WlzXN4t8JOC26.jpg",
+                    caption1Text: "vision is blurred",
+                    secondImageUrl: "https://www.practically.com/studymaterial/wp-content/uploads/2020/11/14-1.png",
+                    caption2Text: "corrected with reading glasses"
+                },
+                astigmatism: {
+                    title: "astigmatism",
+                    description: "astigmatism is caused by an irregularly shaped cornea or lens, which prevents light from focusing correctly on the retina. this results in blurred or distorted vision at all distances. it can be either congenital or caused by injury or accidents. it can be corrected with suitable cylindrical lenses.",
+                    imageUrl: "https://images.ctfassets.net/xxv4b9mbhlgd/img_345/1cf9b148ad1c231a9ed6115948574090/349.gif",
+                    caption1Text: "irregular focus",
+                    secondImageUrl: "https://www.researchgate.net/publication/286518295/figure/fig1/AS:319301807558658@1453138891164/Cylindrical-and-toric-lenses.png",
+                    caption2Text: "corrected with cylindrical lens"
+                },
+                cataract: {
+                    title: "cataract",
+                    description: "cataract is a clouding of the eye's natural lens, which lies behind the iris and pupil. this clouding scatters light, leading to blurry vision. it is a common age-related condition, and it worsens over time. but it can be corrected by a surgical procedure where the faulty lens is removed and a new artificial replacement lens is inserted.",
+                    imageUrl: "https://media.cuh.nhs.uk/images/Capture_CR70Cn9.width-840.png",
+                    caption1Text: "cataract-affected eye",
+                    secondImageUrl: "https://reviewofpresbyopia.com/wp-content/uploads/2023/07/dt_211012_cataract_eye_surgery_800x450.jpg",
+                    caption2Text: "corrected through surgery"
+                },
+                colorblindness: {
+                    title: "color blindness",
+                    description: "color blindness is a condition where the eye's cones (photoreceptive cells responsible for color vision) are defective. it typically affects the ability to distinguish between certain colors, most commonly red and green (deuteranopia).",
+                    imageUrl: "https://colormax.org/wp-content/uploads/2019/07/color-blind-test.png",
+                    caption1Text: "the colour plate test, originally devised by shinobu ishihara, helps diagnose color blindness.",
+                    secondImageUrl: "", // Removed second image for color blindness
+                    caption2Text: "" // Removed second caption for color blindness
+                }
+            };
+
+            // Function to update the diagram images and explanation
+            const updateDiagram = (condition) => {
+                const data = conditionsData[condition];
+
+                // Always set the first image and caption
+                eyeDiagramImage1.src = data.imageUrl;
+                eyeDiagramImage1.alt = `Diagram 1 for ${data.title}`;
+                imageCaption1.textContent = data.caption1Text;
+
+                // Determine if the current condition requires a white background for the first image
+                const whiteBackgroundConditions1stImage = ['normal', 'myopia', 'hypermetropia', 'astigmatism', 'cataract', 'colorblindness'];
+                if (whiteBackgroundConditions1stImage.includes(condition)) {
+                    eyeDiagramImage1.classList.add('white-background-image');
+                } else {
+                    eyeDiagramImage1.classList.remove('white-background-image');
+                }
+
+
+                // Handle the second image and caption visibility
+                if (data.secondImageUrl && data.secondImageUrl !== "") {
+                    eyeDiagramImage2.src = data.secondImageUrl;
+                    eyeDiagramImage2.alt = `Diagram 2 for ${data.title}`;
+                    imageCaption2.textContent = data.caption2Text;
+                    eyeDiagramImage2.style.display = 'block'; // Show the image
+                    imageCaption2.style.display = 'block'; // Show the caption
+                    imageContainerWrapper.classList.remove('single-image'); // Ensure wrapper is not in single-image mode
+
+                    // Determine if the current condition requires a white background for the second image
+                    const whiteBackgroundConditions2ndImage = ['myopia', 'hypermetropia', 'presbyopia']; // Added 'myopia'
+                    if (whiteBackgroundConditions2ndImage.includes(condition)) {
+                        eyeDiagramImage2.classList.add('white-background-image');
+                    } else {
+                        eyeDiagramImage2.classList.remove('white-background-image');
+                    }
+
+                } else {
+                    eyeDiagramImage2.src = ''; // Clear src
+                    eyeDiagramImage2.alt = ''; // Clear alt
+                    imageCaption2.textContent = ''; // Clear caption
+                    eyeDiagramImage2.style.display = 'none'; // Hide the image
+                    imageCaption2.style.display = 'none'; // Hide the caption
+                    imageContainerWrapper.classList.add('single-image'); // Add class for single image styling
+                }
+
+                explanationBox.innerHTML = `<strong>${data.title}</strong><br>${data.description}`;
+            };
+
+            // Event listeners for buttons
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    buttons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    button.classList.add('active');
+                    // Update the images and explanation
+                    updateDiagram(button.dataset.condition);
+                });
+            });
+
+            // Initial load: Display normal vision
+            updateDiagram('normal');
+        });
+    </script>
+
+    <!-- navigation links at the bottom -->
+    <footer class="w-full flex flex-col items-center pb-8 opacity-0 footer-fade-in monomakh-font">
+        <p class="text-xs sm:text-sm md:text-base tracking-widest font-bold mb-4">
+            swaz things (a website by sai srinivas)
+        </p>
+        <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-widest font-bold">
+            <a href="index.html" class="hover:text-gray-400 transition-colors duration-200 px-2">home</a>
+            <span class="px-2">·</span>
+            <a href="blog.html" class="hover:text-gray-400 transition-colors duration-200 px-2">blog</a>
+            <span class="px-2">·</span>
+            <a href="media.html" class="hover:text-gray-400 transition-colors duration-200 px-2">media</a>
+            <span class="px-2">·</span>
+            <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
+            <span class="px-2">·</span>
+            <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2">pictures</a>
+            <span class="px-2">·</span>
+            <a href="about.html" class="hover:text-white transition-colors duration-200 px-2">about</a>
+        </nav>
+    </footer>
+</body>
+</html>

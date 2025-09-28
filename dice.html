@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>dice roller</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Space Grotesk Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap">
+    <!-- Monomakh One Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monomakh+One&display=swap">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* custom animation for the roll effect */
+        @keyframes dice-roll-animation {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-10px) scale(1.1); opacity: 0.8; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .roll-animation {
+            animation: dice-roll-animation 0.5s ease-in-out;
+        }
+
+        /* styling for the svg dice */
+        .dice-svg-container {
+            /* the parent container for the svg */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+        }
+    
+        .dice-svg {
+            /* the main svg element */
+            width: 100%;
+            height: 100%;
+        }
+
+        .dice-face {
+            /* the background rectangle of the dice */
+            fill: #333;
+        }
+
+        .dice-number {
+            /* styling for the text number inside the svg */
+            font-size: 28px;
+            font-weight: bold;
+            fill: #fff;
+            /* ensures the text is properly centered */
+            dominant-baseline: middle;
+            text-anchor: middle;
+        }
+
+        /* style for the statistics section */
+        #statisticsSection {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 500px; /* a large value to allow the transition */
+            overflow: hidden;
+            opacity: 1;
+        }
+
+        #statisticsSection.hidden {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+            border-top: none !important;
+        }
+        
+        #rollHistoryDisplay {
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px solid #2d2d2d;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            background-color: #1a1a1a;
+        }
+
+        /* animation for the footer */
+        @keyframes footer-fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .footer-fade-in {
+            animation: footer-fade-in 1s ease-in-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* apply monomakh one to the footer */
+        footer {
+            font-family: 'Monomakh One', serif;
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- main container for the app -->
+    <div class="bg-gray-900 p-8 rounded-xl shadow-2xl w-full max-w-sm flex flex-col items-center space-y-8">
+        <h1 class="text-3xl font-extrabold text-white text-center">
+            dice roller
+        </h1>
+
+        <!-- controls section -->
+        <div class="w-full flex flex-col items-center space-y-4">
+            <label for="numSides" class="text-lg font-medium text-gray-300">
+                select number of sides (3-100):
+            </label>
+            <input type="number" id="numSides" value="6" min="3" max="100" class="w-24 text-center p-3 rounded-lg bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
+            <button id="rollBtn" class="w-full py-3 px-6 rounded-lg font-semibold bg-red-600 hover:bg-red-700 transition-colors shadow-lg">
+                roll dice
+            </button>
+        </div>
+
+        <!-- result display section -->
+        <!-- this container will hold either the number or the svg dice image -->
+        <div id="resultDisplay" class="text-7xl font-bold text-red-400 p-6 rounded-2xl bg-gray-900 w-28 h-28 flex items-center justify-center transition-all border-2 border-white">
+            ?
+        </div>
+        <div id="messageDisplay" class="text-sm font-light text-gray-400 text-center min-h-[1.5rem]">
+            <!-- messages will appear here -->
+        </div>
+
+        <!-- toggle button for statistics -->
+        <button id="toggleStatsBtn" class="py-2 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-800 transition-colors">
+            show statistics
+        </button>
+
+        <!-- roll statistics section -->
+        <div id="statisticsSection" class="w-full mt-8 pt-4 border-t border-gray-700 hidden">
+            <h2 class="text-lg font-semibold text-gray-300 text-center mb-2">roll statistics</h2>
+            <div id="statsDisplay" class="text-sm text-gray-400 text-center">
+                total rolls: 0
+            </div>
+            <div id="rollHistoryDisplay" class="text-sm text-gray-400 text-center mt-4">
+                <!-- log of every roll will be displayed here -->
+            </div>
+            <button id="clearLogBtn" class="mt-4 py-2 px-4 rounded-lg font-semibold bg-gray-700 hover:bg-gray-800 transition-colors">
+                clear roll log
+            </button>
+        </div>
+    </div>
+
+    <!-- navigation links at the bottom -->
+    <footer class="w-full flex flex-col items-center pb-8 opacity-0 footer-fade-in mt-16">
+        <p class="text-xs sm:text-sm md:text-base tracking-widest font-bold mb-4">
+            swaz things (a website by sai srinivas)
+        </p>
+        <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-widest font-bold">
+            <a href="index.html" class="hover:text-gray-400 transition-colors duration-200 px-2">home</a>
+            <span class="px-2">·</span>
+            <a href="blog.html" class="hover:text-gray-400 transition-colors duration-200 px-2">blog</a>
+            <span class="px-2">·</span>
+            <a href="media.html" class="hover:text-gray-400 transition-colors duration-200 px-2">media</a>
+            <span class="px-2">·</span>
+            <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
+            <span class="px-2">·</span>
+            <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2">pictures</a>
+            <span class="px-2">·</span>
+            <a href="about.html" class="hover:text-gray-400 transition-colors duration-200 px-2">about</a>
+        </nav>
+    </footer>
+
+    <script>
+        // get references to the html elements
+        const numSidesInput = document.getElementById('numSides');
+        const rollBtn = document.getElementById('rollBtn');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const messageDisplay = document.getElementById('messageDisplay');
+        const toggleStatsBtn = document.getElementById('toggleStatsBtn');
+        const statisticsSection = document.getElementById('statisticsSection');
+        const statsDisplay = document.getElementById('statsDisplay');
+        const rollHistoryDisplay = document.getElementById('rollHistoryDisplay');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+
+        // svg templates for a standard 6-sided die
+        // the number is now included as a <text> element within the SVG
+        const diceSvgTemplates = {
+            1: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">1</text></svg>`,
+            2: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">2</text></svg>`,
+            3: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">3</text></svg>`,
+            4: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">4</text></svg>`,
+            5: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">5</text></svg>`,
+            6: `<svg class="dice-svg" viewBox="0 0 100 100"><rect class="dice-face" x="10" y="10" width="80" height="80" rx="15" ry="15" /><text x="50" y="50" class="dice-number">6</text></svg>`,
+        };
+
+        // initialize variables for statistics
+        let totalRolls = 0;
+        let rollHistory = [];
+
+        // function to update the roll statistics display
+        function updateStatsDisplay() {
+            statsDisplay.textContent = `total rolls: ${totalRolls}`;
+
+            // update the roll history display
+            let historyHtml = '<h3 class="font-bold mb-2">roll log</h3>';
+            rollHistory.forEach((roll, index) => {
+                historyHtml += `<span class="font-mono text-white bg-gray-700 rounded-full px-2 py-0.5 m-1 inline-block">${roll}</span>`;
+            });
+            rollHistoryDisplay.innerHTML = historyHtml;
+            // auto-scroll to the bottom
+            rollHistoryDisplay.scrollTop = rollHistoryDisplay.scrollHeight;
+        }
+        
+        // function to reset the log
+        function clearRollLog() {
+            totalRolls = 0;
+            rollHistory = [];
+            updateStatsDisplay();
+        }
+
+        // add an event listener to the roll button
+        rollBtn.addEventListener('click', () => {
+            // clear any previous messages
+            messageDisplay.textContent = '';
+            
+            // get the number of sides from the input and parse it as an integer
+            let numSides = parseInt(numSidesInput.value, 10);
+
+            // validate the input to ensure it's a number between 3 and 100
+            if (isNaN(numSides) || numSides < 3 || numSides > 100) {
+                messageDisplay.textContent = 'please enter a valid number of sides (3-100).';
+                resultDisplay.textContent = '?';
+                return; // exit the function if validation fails
+            }
+
+            // generate a random number from 1 to the specified number of sides
+            const rollResult = Math.floor(Math.random() * numSides) + 1;
+
+            // update statistics
+            totalRolls++;
+            // update roll history
+            rollHistory.push(rollResult);
+
+            // check if the roll result corresponds to a standard dice face
+            if (diceSvgTemplates[rollResult] && numSides <= 6) {
+                // if so, update the result display with the SVG
+                resultDisplay.innerHTML = diceSvgTemplates[rollResult];
+                // remove the text-related class and add the svg-related class
+                resultDisplay.classList.remove('text-7xl', 'text-red-400', 'p-6');
+            } else {
+                // otherwise, display the number
+                resultDisplay.textContent = rollResult;
+                // add the text-related classes back and remove svg-related class
+                resultDisplay.classList.add('text-7xl', 'text-red-400', 'p-6');
+            }
+            
+            // add a class to trigger the roll animation
+            resultDisplay.classList.add('roll-animation');
+
+            // remove the animation class after it completes so it can be re-triggered
+            setTimeout(() => {
+                resultDisplay.classList.remove('roll-animation');
+            }, 500); // matches the animation duration
+
+            // update the message with the new format
+            messageDisplay.textContent = `you rolled ${rollResult} on a ${numSides}-sided dice`;
+
+            // update the statistics display
+            updateStatsDisplay();
+        });
+        
+        // add event listener for the clear log button
+        clearLogBtn.addEventListener('click', clearRollLog);
+
+        // add event listener for the toggle button
+        toggleStatsBtn.addEventListener('click', () => {
+            const isHidden = statisticsSection.classList.toggle('hidden');
+            if (isHidden) {
+                toggleStatsBtn.textContent = 'show statistics';
+            } else {
+                toggleStatsBtn.textContent = 'hide statistics';
+            }
+        });
+
+        // also add a keyup event listener to allow rolling with the enter key
+        numSidesInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                rollBtn.click();
+            }
+        });
+
+        // initial state
+        resultDisplay.classList.add('text-7xl', 'text-red-400');
+        updateStatsDisplay(); // display initial stats
+    </script>
+</body>
+</html>

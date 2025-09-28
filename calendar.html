@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>swaz things - calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barriecito&family=Inconsolata:wght@400;700&family=Monomakh&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@tailwindcss/browser@latest"></script>
+    <style>
+        /* General styling for the body and background */
+        body {
+            background-color: #000;
+            color: #ff0000;
+            min-height: 10vh;
+            position: relative;
+            font-family: 'Barriecito', cursive;
+        }
+
+        /* Styling for the calendar days */
+        .calendar-day {
+            border: 2px solid red;
+            padding: 8px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            box-sizing: border-box;
+            position: relative;
+            background-color: #000;
+            color: #fff;
+            padding-left: 10px;
+            font-family: 'Inconsolata', monospace;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        
+        /* Hover effect for calendar days */
+        .calendar-day:hover {
+            background-color: #f9fafb;
+            cursor: pointer;
+            color: #000;
+        }
+
+        /* Styling for the selected day */
+        .calendar-day.selected {
+            background-color: #000;
+            color: #dc2626;
+            font-weight: 500;
+            border: 2px solid #dc2626;
+        }
+        
+        /* Styling for the current day */
+        .calendar-day.today {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid white;
+            font-weight: 600;
+        }
+
+        /* Hover effect for the current day */
+        .calendar-day.today:hover {
+            background-color: #f9fafb;
+            cursor: pointer;
+            color: #000;
+        }
+        
+        /* Styling for empty days */
+        .calendar-day.empty {
+            background-color: #000;
+            color: #000;
+            cursor: not-allowed;
+            border: 2px solid #141414;
+        }
+
+        /* Styling for weekend days */
+        .weekend {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid #8B0000;
+        }
+        
+        .weekend:hover {
+            color: #000;
+        }
+
+        /* Styling for special days */
+        .special-day {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid crimson;
+        }
+
+        .special-day:hover {
+            color: #000;
+        }
+        
+        /* Styles for tooltips on hover */
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            z-index: 10;
+            border: 1px solid #fff;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .calendar-day:hover .tooltip {
+            display: block;
+        }
+
+        /* Styling for specific calendar elements */
+        .bg-white { background-color: #000; }
+        .text-gray-800 { color: #fff; }
+        .text-gray-700 { color: #fff; }
+        .text-gray-500 { color: #dc2626; }
+        
+        /* Styling for the red text color and hover effect on navigation buttons */
+        .text-red-600 { color: #dc2626; }
+        .hover\:text-red-600:hover { color: #fff; }
+
+        /* Styling for month summary text box */
+        .text-box {
+            background-color: #000;
+            border: 2px solid red;
+            color: red;
+            padding: 10px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(139, 0, 0, 0.1);
+            font-family: 'Inconsolata', monospace;
+            text-align: center;
+            border-radius: 8px;
+        }
+        
+        /* Styling for the second text box */
+        .text-box-2 {
+            background-color: #000;
+            border: 2px solid red;
+            color: #fff;
+            padding: 10px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(139, 0, 0, 0.1);
+            font-family: 'Barriecito', cursive;
+            text-align: center;
+        }
+
+        .day-header { 
+            color: #fff; 
+            font-family: 'Inconsolata', monospace;
+            font-weight: bold;
+        }
+        
+        #month-name {
+            font-family: 'Inconsolata', monospace;
+            font-weight: bold;
+        }
+
+        /* Grid layout for the calendar */
+        #calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+        
+        /* Highlighting and rainbow border styles */
+        .highlighted {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid red;
+        }
+        
+        .highlighted:hover { color: #000; }
+        
+        /* Rainbow border with red as a prominent color */
+        .rainbow-border {
+            background-color: #000;
+            color: #fff;
+            border: 2px solid;
+            border-image: linear-gradient(to bottom, red, orange, yellow, green, blue, violet) 1;
+        }
+
+        .rainbow-border:hover { color: #000; }
+
+        /* Styles for dots and X marks */
+        .red-dot::after {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+            top: 3px;
+            right: 3px;
+        }
+        
+        .x-mark::after, .red-x-mark::after {
+            content: 'X';
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: normal;
+        }
+        
+        .calendar-day.today.x-mark::after { content: ''; }
+        
+        /* Specific borders */
+        .black-fill { background-color: #000; color: #fff; }
+        .white-border { border: 2px solid #fff; }
+        .red-border { border: 2px solid red; }
+        .orange-border { border: 2px solid orange; }
+        .blue-border { border: 2px solid blue; }
+        
+        /* New class for the orange-white-green gradient border */
+        .orange-white-green-border {
+            border: 2px solid;
+            border-image: linear-gradient(to bottom, orange, white, green) 1;
+        }
+
+        /* Month summary box style */
+        .month-summary {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 6px rgba(139, 0, 0, 0.1);
+            font-family: 'Barriecito', cursive;
+            text-align: center;
+        }
+
+        /* Custom Dialog Box Styles */
+        .custom-dialog-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .custom-dialog-content {
+            background-color: #000;
+            border: 2px solid red;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            font-family: 'Barriecito', cursive;
+            max-width: 80%;
+        }
+
+        .custom-dialog-content button {
+            background-color: red;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+
+        .custom-dialog-content button:hover {
+            background-color: crimson;
+        }
+        
+        /* Button positioning */
+        .top-right-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            z-index: 50;
+        }
+        
+        /* New footer styles */
+        footer {
+            font-family: 'Monomakh', serif;
+            color: #fff;
+        }
+
+        .heading {
+            font-family: 'Inconsolata', monospace;
+            margin-top: 0;
+            padding-top: 20px;
+        }
+
+        /* Keyframe animation for the fade-in effect */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        /* Delay for the heading fade-in effect */
+        .heading-fade-in {
+            animation-delay: 0.2s;
+        }
+
+        /* Delay for the calendar fade-in effect */
+        .calendar-container {
+            animation-delay: 0.3s;
+        }
+
+        /* Delay for the divider fade-in effect */
+        .divider-fade-in {
+            animation-delay: 0.4s;
+        }
+        
+        /* Delay for the footer fade-in effect */
+        .footer-fade-in {
+            animation-delay: 0.5s;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-900 font-inter flex flex-col justify-center items-center min-h-screen">
+    <h1 class="text-white text-center text-4xl mb-0 font-bold heading fade-in heading-fade-in">swaz calendar</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-md font-bold fade-in calendar-container">
+        <div class="flex items-center justify-center mb-4">
+            <button id="prev-month" class="text-gray-700 hover:text-red-600 focus:outline-none focus:shadow-outline rounded-md p-1 mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                </svg>
+            </button>
+            <h2 id="month-name" class="text-xl font-semibold text-gray-800">Month</h2>
+            <button id="next-month" class="text-gray-700 hover:text-red-600 focus:outline-none focus:shadow-outline rounded-md p-1 ml-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            </button>
+        </div>
+        <div class="grid grid-cols-7 gap-2 text-center text-sm font-medium text-gray-500 mb-2">
+            <div class="day-header">sun</div>
+            <div class="day-header">mon</div>
+            <div class="day-header">tue</div>
+            <div class="day-header">wed</div>
+            <div class="day-header">thu</div>
+            <div class="day-header">fri</div>
+            <div class="day-header">sat</div>
+        </div>
+        <div id="calendar-grid" class="grid grid-cols-7 gap-2 text-center">
+        </div>
+        <div id="month-text-box" class="text-box">
+                Text for Current Month
+        </div>
+    </div>
+
+    <hr class="border-t border-white my-6 w-full max-w-lg opacity-0 fade-in divider-fade-in">
+
+    <footer class="w-full flex flex-col items-center pb-8 opacity-0 fade-in footer-fade-in">
+        <p class="text-xs sm:text-sm md:text-base tracking-widest font-light mb-4 text-white">
+            swaz things (a website by sai srinivas)
+        </p>
+        <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-widest font-light text-white">
+            <a href="index.html" class="hover:text-gray-400 transition-colors duration-200 px-2">home</a>
+            <span class="px-2">·</span>
+            <a href="blog.html" class="hover:text-gray-400 transition-colors duration-200 px-2">blog</a>
+            <span class="px-2">·</span>
+            <a href="media.html" class="hover:text-gray-400 transition-colors duration-200 px-2">media</a>
+            <span class="px-2">·</span>
+            <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
+            <span class="px-2">·</span>
+            <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2">pictures</a>
+            <span class="px-2">·</span>
+            <a href="about.html" class="hover:text-gray-400 transition-colors duration-200 px-2">about</a>
+        </nav>     
+    </footer>
+
+    <script>
+        const monthName = document.getElementById('month-name');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const calendarGrid = document.getElementById('calendar-grid');
+        const monthTextBox = document.getElementById('month-text-box');
+
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let startDate = new Date(2025, 7); // Changed start date to August 2025
+        let endDate = new Date(2026, 2, 31);
+        let monthText = {};
+
+        const monthNames = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+        const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+        }
+
+        function getDaysInMonth(month, year) {
+            if (month === 1 && isLeapYear(year)) {
+                return 29;
+            }
+            return daysInMonth[month];
+        }
+
+        function showCustomDialog(message) {
+            const dialogOverlay = document.createElement('div');
+            dialogOverlay.classList.add('custom-dialog-overlay');
+
+            const dialogContent = document.createElement('div');
+            dialogContent.classList.add('custom-dialog-content');
+
+            const messageParagraph = document.createElement('p');
+            messageParagraph.textContent = message;
+            dialogContent.appendChild(messageParagraph);
+
+            const closeButton = document.createElement('button');
+            closeButton.textContent = 'ok';
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(dialogOverlay);
+            });
+            dialogContent.appendChild(closeButton);
+
+            dialogOverlay.appendChild(dialogContent);
+            document.body.appendChild(dialogOverlay);
+        }
+
+        function generateCalendar(month, year) {
+            calendarGrid.innerHTML = '';
+            monthName.textContent = monthNames[month] + ' ' + year;
+            
+            // hide prev button if we are at the start date
+            if (month === startDate.getMonth() && year === startDate.getFullYear()) {
+                prevMonthBtn.style.visibility = 'hidden';
+            } else {
+                prevMonthBtn.style.visibility = 'visible';
+            }
+
+            if (new Date(year, month, 1) < startDate) {
+                currentMonth = startDate.getMonth();
+                currentYear = startDate.getFullYear();
+                month = currentMonth;
+                year = currentYear;
+            }
+
+            let textBoxContent = "";
+            if (month === 7 && year === 2025) {
+                textBoxContent = " <b> <i> what happened this month? </i> </b> <br> <span style='color: white;'> <b> 5/8 : </b> went on a field trip to bangalore palace </span> <br> <span style='color: white;'> <b> 15/8 : </b> independence day! </span> <br> <span style='color: white;'> <b> 16/8 : </b> krishna janmashtami </span> <br> <span style='color: white;'> <b> 27/8 : </b> ganesh chaturthi </span>";
+            } else if (month === 8 && year === 2025) {
+                textBoxContent = " <b> <i> what happened this month? </i> </b> <br> <span style='color: white;'> <b> 5/9 : </b> onam / teachers' day / id milad </span>";
+            } else {
+                textBoxContent = "coming soon...";
+            }
+
+            monthTextBox.innerHTML = textBoxContent;
+
+            const firstDayOfMonth = new Date(year, month, 1).getDay();
+            const totalDays = getDaysInMonth(month, year);
+            const today = new Date();
+            let dayCounter = 1;
+
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDayOfMonth) {
+                        const emptyCell = document.createElement('div');
+                        emptyCell.classList.add('calendar-day', 'empty');
+                        emptyCell.textContent = "x";
+                        calendarGrid.appendChild(emptyCell);
+                    } else if (dayCounter <= totalDays) {
+                        const dayCell = document.createElement('div');
+                        dayCell.classList.add('calendar-day');
+                        if (j === 0 || j === 6) {
+                            dayCell.classList.add('weekend');
+                        }
+
+                        dayCell.textContent = dayCounter;
+                        const fullDate = new Date(year, month, dayCounter);
+                        
+                        // add blue border to august 5th and september 5th
+                        if ((month === 7 && dayCounter === 5) || (month === 8 && dayCounter === 5) || (month === 7 && dayCounter === 27)) {
+                            dayCell.classList.add('blue-border');
+                        }
+
+                        // add orange-white-green gradient to august 15th
+                        if (month === 7 && dayCounter === 15) {
+                            dayCell.classList.add('orange-white-green-border');
+                        }
+                        // add a blue outline to august 16th
+                        if (month === 7 && dayCounter === 16) {
+                            dayCell.classList.add('blue-border');
+                        }
+                        
+                        if (fullDate.toDateString() === today.toDateString()) {
+                            dayCell.classList.add('today');
+                        }
+
+                        if (fullDate < today) {
+                            dayCell.classList.add('x-mark');
+                        }
+
+                        if (fullDate < startDate || fullDate > endDate) {
+                            dayCell.classList.add('empty');
+                            dayCell.textContent = "x";
+                        }
+                        
+                        // Disable the click-to-select feature
+                        dayCell.addEventListener('click', () => {
+                            // Do nothing
+                        });
+
+                        calendarGrid.appendChild(dayCell);
+                        dayCounter++;
+                    } else {
+                        const emptyCell = document.createElement('div');
+                        emptyCell.classList.add('calendar-day', 'empty');
+                        emptyCell.textContent = "x";
+                        calendarGrid.appendChild(emptyCell);
+                    }
+                }
+            }
+        }
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            if (new Date(currentYear, currentMonth, 1) < startDate) {
+                currentMonth = startDate.getMonth();
+                currentYear = startDate.getFullYear();
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            if (currentYear === endDate.getFullYear() && currentMonth === endDate.getMonth()) {
+                showCustomDialog("you have reached the end of the current calendar range.\nmore coming later, stay tuned.");
+                return;
+            }
+
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            if (new Date(currentYear, currentMonth, 1) > endDate) {
+                currentMonth = endDate.getMonth();
+                currentYear = endDate.getFullYear();
+            }
+            generateCalendar(currentMonth, currentYear);
+        });
+
+        if (new Date(currentYear, currentMonth, 1) < startDate) {
+            currentMonth = startDate.getMonth();
+            currentYear = startDate.getFullYear();
+        }
+        generateCalendar(currentMonth, currentYear);
+    </script>
+</body>
+</html>

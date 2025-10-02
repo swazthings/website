@@ -1,28 +1,42 @@
-<!DOCTYPE html>
+<!DOCTYPE object>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="icon.png">
     <title>swaz things - blog</title>
-    <!-- Include Tailwind CSS library -->
+    <!-- Include Tailwind CSS library for layout utilities -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font: Changed to Roboto Mono (a modern monospaced font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* New font for the footer, moved to the top for guaranteed loading */
-        @import url('https://fonts.googleapis.com/css2?family=Monomakh&display=swap');
+        /*
+        ** MACINTOSH 1980S/SYSTEM 7 STYLING **
+        */
+        :root {
+            --mac-white: #FFFFFF;
+            --mac-black: #000000;
+            --mac-light-gray: #DDDDDD; /* Desktop Background */
+            --mac-medium-gray: #AAAAAA; /* Pattern/Divider color */
+            
+            /* Classic Mac Title Bar Striped Pattern (1px black, 1px white) */
+            --mac-title-pattern: repeating-linear-gradient(90deg, var(--mac-medium-gray), var(--mac-medium-gray) 1px, var(--mac-white) 1px, var(--mac-white) 2px);
+        }
 
-        /* basic reset and font styling for dark theme */
+        /* basic reset and font styling for the retro theme */
         body {
-            font-family: 'Roboto Mono', monospace, sans-serif;
-            line-height: 1.6;
+            /* Changed to 'Roboto Mono' for a clean, monospaced digital look */
+            font-family: 'Roboto Mono', monospace; 
+            line-height: 1.5; /* Slightly increased line height for readability */
             margin: 0;
-            padding: 20px; /* overall padding around the centered wrapper */
-            /* UPDATED: Cool, deep blue-black gradient (from very dark navy to black) */
-            background: linear-gradient(to bottom, #050A19, #000000);
-            color: #FFFFFF; /* changed to white text */
-            min-height: 100vh; /* still needed for full viewport height */
+            padding: 20px;
+            /* Light gray desktop background */
+            background-color: var(--mac-light-gray);
+            color: var(--mac-black);
+            min-height: 100vh;
             box-sizing: border-box;
             overflow-x: hidden;
+            text-transform: lowercase; /* Keeping user's preferred lowercase style */
         }
 
         /* Animate the footer fade-in on load */
@@ -32,14 +46,14 @@
         }
         .footer-fade-in {
             animation: fadeIn 1.5s ease-out forwards;
-            animation-delay: 1s; /* Delay the animation to load after page content */
+            animation-delay: 1s;
         }
 
         /* Animation for fading in new content */
         @keyframes fadeInContent {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(5px);
             }
             to {
                 opacity: 1;
@@ -47,193 +61,207 @@
             }
         }
         .fade-in-content {
-            animation: fadeInContent 0.5s ease-out forwards;
+            animation: fadeInContent 0.3s ease-out forwards;
         }
         
-        footer {
-            font-family: 'Monomakh', monospace;
-        }
-
-        /* main application wrapper - controls overall positioning and state */
+        /* The main window wrapper */
         .diary-app-wrapper {
-            display: flex; /* Always flex now that password is removed */
-            flex-direction: column; /* Stacks children vertically: Header, then main content */
+            display: flex;
+            flex-direction: column;
             width: 100%;
-            max-width: 1200px; /* max width for the entire application */
-            margin: 0 auto; /* horizontally center the block element */
-            background-color: #000000; /* changed to black */
-            border-radius: 0; /* unrounded edges */
-            border: 8px solid #FFFFFF; /* changed to a thicker white outline */
-            overflow: hidden; /* ensures rounded corners apply to children */
-            min-height: 600px; /* minimum height for the diary */
+            max-width: 900px;
+            margin: 0 auto;
+            /* Mac Style: 1px black border and simple 2D shadow */
+            background-color: var(--mac-white);
+            border: 1px solid var(--mac-black); 
+            box-shadow: 2px 2px 0 0 var(--mac-black); 
+            border-radius: 0; /* No rounded corners */
+            overflow: hidden;
+            min-height: 600px;
         }
+        
+        /* The title bar component */
+        .window-title-bar {
+            background-image: var(--mac-title-pattern);
+            background-repeat: repeat-x;
+            background-size: 4px 100%; /* Wider stripes for a cleaner look */
+            border-bottom: 1px solid var(--mac-black);
+            padding: 4px 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-transform: none; /* Title text is usually mixed case/clean */
+            font-weight: bold;
+        }
+        
+        /* Window close/control button (non-functional) */
+        .window-controls {
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 9px;
+            height: 9px;
+            background-color: var(--mac-white);
+            border: 1px solid var(--mac-black);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .window-controls:before {
+            content: 'x'; /* Mac close button icon */
+            font-size: 8px;
+            line-height: 0;
+            color: var(--mac-black);
+            font-family: monospace;
+        }
+        
 
-        /* diary content section - now holds the sidebar and main display area */
+        /* diary content section */
         .diary-content {
-            flex-grow: 1; /* takes remaining vertical space within wrapper */
-            display: flex; /* enables horizontal layout for sidebar and main area */
-            flex-direction: row; /* arranges sidebar and main area side-by-side */
-            width: 100%; /* fills the width of its parent */
-        }
-
-        /* Header area background */
-        .diary-app-wrapper > div:first-child {
-            background-color: #000000 !important; /* make the header area black */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
         }
 
         /* main entry display area */
         .entry-display-area {
-            flex-grow: 1; /* takes up remaining horizontal space */
-            padding: 30px;
-            background-color: #000000; /* changed to black */
-            border-radius: 0; /* no rounded corners here, handled by wrapper */
+            flex-grow: 1;
+            padding: 20px;
+            background-color: var(--mac-white);
             box-sizing: border-box;
-            height: 600px; /* Set a fixed height */
-            overflow-y: scroll; /* Enable vertical scrolling within the box */
+            height: 550px; /* Adjusted height after adding title bar */
+            overflow-y: scroll;
         }
 
-        /* Style for the main title "swaz blogs" */
-        .entry-display-area .main-title {
-            color: #FFFFFF; /* changed to white color for the title */
-            font-size: 1.5em; /* Smaller font size */
-            margin-top: 0;
-            margin-bottom: 10px; /* Reduced margin to bring divider closer */
-            text-align: right; /* Aligned to the right */
-            font-weight: normal; /* not bold */
-            text-transform: lowercase; /* ensure lowercase */
-        }
-
-        /* CHANGED: Headings are now blue */
+        /* Entry inner title/header */
         .entry-display-area h3 {
-            color: #0048C0; /* changed to a deep royal blue */
-            font-size: 2.2em;
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
+            color: var(--mac-black);
+            font-size: 1.5em;
+            margin: 0 0 15px 0;
+            padding: 5px 0;
+            text-align: left;
+            font-weight: bold;
+            border-bottom: 1px dashed var(--mac-medium-gray);
         }
 
         .entry-content p {
-            line-height: 1.7;
-            color: #FFFFFF; /* changed to white */
-            font-weight: normal; /* not bold */
-            margin-bottom: 0; /* reset default paragraph margin */
+            color: var(--mac-black);
+            margin-bottom: 0;
+            font-size: 1em;
         }
 
-        /* specific spacing for lines in the first entry using new paragraphs */
         .entry-content p.spaced-line {
-            margin-bottom: 1.2rem; /* apply custom spacing */
-        }
-
-        .entry-content p.spaced-line:last-of-type {
-            margin-bottom: 0; /* remove margin from the last paragraph in the sequence */
+            margin-bottom: 1rem;
         }
         
-        /* New styles for the centered text/quotes */
+        /* Message Box / Quote styling */
         .centered-quote {
-            text-align: center;
-            margin-top: 1.5em;
-            margin-bottom: 1.5em;
+            text-align: left;
+            margin: 1.5em 0;
+            padding: 10px;
+            background-color: var(--mac-white);
+            border: 1px solid var(--mac-black);
             font-style: italic;
+            box-shadow: 1px 1px 0 0 var(--mac-black);
         }
         .centered-quote strong {
             display: block;
             font-style: normal;
+            font-weight: bold;
+            color: var(--mac-black);
+            margin-bottom: 5px;
         }
 
-        /* special styling for ASCII art to maintain monospace font */
-        .entry-content pre {
-            font-family: 'Roboto Mono', monospace; /* ensure roboto mono for ascii art */
-            color: #FFFFFF; /* changed to white for ascii art */
-            white-space: pre; /* preserve whitespace and line breaks */
-            margin: 1em 0;
-            padding: 0;
-            overflow-x: auto; /* allow horizontal scroll if ascii is too wide */
-        }
-
-        .entry-content {
-            /* Dotted line at the top removed as requested */
-            padding-top: 20px;
-        }
-
-        /* message for no entry selected */
-        .no-entry-selected {
-            text-align: center;
-            font-style: italic;
-            color: #FFFFFF; /* changed to white */
-            padding-top: 50px;
-            font-size: 1.2em;
-            font-weight: normal; /* not bold */
-        }
-
-
-        /* table of contents (entry list) - now a vertical column */
+        /* table of contents (entry list) - sidebar */
         .entry-list-grid {
-            width: 180px; /* Fixed width for the sidebar */
-            flex-shrink: 0; /* Prevents shrinking */
-            background-color: #000000; /* changed to black */
-            padding: 20px 10px; /* Adjusted padding for vertical layout */
-            border-right: 2px solid #FFFFFF; /* divider on the right side of the sidebar, changed to a thicker white */
+            width: 180px;
+            flex-shrink: 0;
+            background-color: var(--mac-white);
+            padding: 10px;
             box-sizing: border-box;
-            display: flex; /* use flexbox for vertical arrangement */
-            flex-direction: column; /* stack items vertically */
-            align-items: center; /* center buttons horizontally within the sidebar */
-            gap: 10px; /* space between buttons */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2px;
+            border-right: 1px solid var(--mac-black);
         }
         
-        /* a tags within the button grid will now have their text wrapped */
-        .entry-list-grid a {
-            word-wrap: break-word; /* allows text to break to the next line */
-            white-space: normal; /* allows text to flow normally */
-        }
-
         .entry-list-grid ul {
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex; /* make ul a flex container */
-            flex-direction: column; /* stack li items vertically */
-            width: 100%; /* make ul fill the width of its parent */
-            align-items: center; /* center list items */
-            gap: 10px; /* space between list items */
+            width: 100%;
         }
 
         .entry-list-grid li {
-            margin: 0; /* remove default list item margin */
-            width: 100%; /* make list items fill the width */
+            margin: 0;
+            width: 100%;
         }
 
-        /* CHANGED: Buttons are now blue */
+        /* Classic Mac "Button" Look for navigation */
         .entry-list-grid a {
             text-decoration: none;
-            color: #FFFFFF; /* changed to white */
-            font-weight: normal; /* not bold */
-            font-size: 1em; /* smaller font for better fit */
-            padding: 10px 15px; /* padding to make numbers clickable squares/circles */
-            display: flex; /* changed to flex to center the text */
-            justify-content: center; /* centers the text horizontally */
-            align-items: center; /* centers the text vertically */
-            width: 150px; /* fixed width for equal size */
-            height: 40px; /* fixed height for equal size */
-            text-align: center; /* fallback for older browsers */
-            border: 2px solid #0048C0; /* changed to deep royal blue */
-            border-radius: 0; /* unrounded corners for buttons */
-            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
-            box-shadow: 1px 1px 3px rgba(0, 72, 192, 0.2); /* changed to blue rgba */
+            color: var(--mac-black);
+            font-weight: normal;
+            font-size: 1em;
+            padding: 4px 6px;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background-color: var(--mac-white);
+            box-sizing: border-box;
+            border: 1px solid var(--mac-black);
+            border-radius: 0;
+            box-shadow: none;
+            transition: none;
         }
 
+        /* Hover: Simple background change */
         .entry-list-grid a:hover {
-            background-color: #0048C0; /* changed to deep royal blue */
-            color: white; /* white text on hover */
-            transform: translateY(-2px);
-            box-shadow: 2px 2px 5px rgba(0, 72, 192, 0.4); /* changed to blue rgba */
+            background-color: var(--mac-light-gray);
         }
 
+        /* Active: Classic Mac Inverted Selection */
         .entry-list-grid a.active {
-            background-color: #0048C0; /* changed to deep royal blue */
-            color: white; /* white text on active number */
-            box-shadow: inset 1px 1px 5px rgba(0, 72, 192, 0.4); /* changed to blue rgba */
-            transform: translateY(0); /* no lift when active */
-            font-weight: normal; /* not bold */
+            background-color: var(--mac-black);
+            color: var(--mac-white);
+            border-color: var(--mac-black);
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Image container and caption styles */
+        .image-container {
+            max-width: 350px; 
+            width: 90%;
+            margin: 20px auto;
+            display: block;
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid var(--mac-black);
+            background-color: var(--mac-white);
+            box-shadow: 1px 1px 0 0 var(--mac-black);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-caption {
+            font-style: italic;
+            text-align: center;
+            padding: 5px 0;
+            font-size: 0.9em;
+            color: var(--mac-black);
+            background-color: var(--mac-light-gray);
+            border-top: 1px solid var(--mac-black);
         }
 
         /* responsive adjustments */
@@ -242,51 +270,46 @@
                 padding: 10px;
             }
             .diary-app-wrapper {
-                border-radius: 0;
+                box-shadow: none;
             }
             .entry-display-area {
-                padding: 20px;
-                height: 400px; /* Adjusted for smaller screens */
+                padding: 15px;
+                height: 400px;
             }
-            .entry-display-area h3 {
-                font-size: 1.8em;
+            .window-title-bar {
+                font-size: 1em;
+            }
+            .diary-content {
+                flex-direction: column; 
             }
             .entry-list-grid {
-                padding: 15px 10px;
-                gap: 5px;
-                width: 100px;
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--mac-black);
+                flex-direction: row; 
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px; 
+                padding: 10px;
+            }
+            .entry-list-grid ul {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .entry-list-grid li {
+                width: auto;
+                flex-shrink: 1;
             }
             .entry-list-grid a {
-                padding: 8px 12px;
-                width: 100%; /* make buttons fill the smaller sidebar width */
+                padding: 4px 6px;
+                font-size: 0.9em;
+                min-width: 60px;
+                text-align: center;
             }
-        }
-
-        /* New image container and caption styles */
-        .image-container {
-            /* Centering the container and giving it a max-width */
-            max-width: 400px; /* reduced from 600px */
-            width: 90%; /* Fluid width for smaller screens */
-            margin: 30px auto; /* Centers the div horizontally */
-            display: block; /* Ensures margin auto works */
-            /* The rest of the styles are the same */
-            border-radius: 0;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            border-radius: 0; /* unrounded corners for the image itself */
-        }
-
-        .image-caption {
-            font-style: italic;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #FFFFFF;
+            .entry-display-area h3 {
+                font-size: 1.3em;
+            }
         }
     </style>
     <!-- Include Tone.js library -->
@@ -295,6 +318,13 @@
 <body>
 
     <div id="diaryAppWrapper" class="diary-app-wrapper">
+        
+        <!-- Mac Window Title Bar -->
+        <div class="window-title-bar">
+            <div class="window-controls"></div>
+            swaz blogs
+        </div>
+
         <!-- diary content section (holds sidebar and main display) -->
         <div id="diaryContent" class="diary-content">
             <!-- entry list grid (now on the left) -->
@@ -304,12 +334,14 @@
                     <li><a href="#" onclick="showContent('entry3'); return false;" data-content-id="entry3">stamps</a></li>
                     <li><a href="#" onclick="showContent('entry4'); return false;" data-content-id="entry4">field trip</a></li>
                     <li><a href="#" onclick="showContent('entry5'); return false;" data-content-id="entry5">ice cream</a></li>
-                    <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">i am back.</a></li>
+                    <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">return</a></li>
                 </ul>
             </div>
 
             <!-- main entry display area -->
             <div id="entryDisplayArea" class="entry-display-area">
+                <!-- Title Strip - Removed the old title strip as it's now in the window-title-bar -->
+
                 <div id="noEntrySelected" class="no-entry-selected">
                     read my blogs here!
                 </div>
@@ -332,9 +364,9 @@
                     </p>
                     <p class="spaced-line">if you guys didn't know, stamp collecting is a hobby i find pretty interesting. in fact, i just like to learn about stamps and the stories behind them. i even have a massive stamp album at home with a bunch of stamps from india (and the rest of the world as well). so it might come as no surprise at all that this weekend i decided to go to the museum of communications (yes, i'm the type of guy that actually enjoys being in museums). anyway, let me tell you how it went.</p>
                     <p class="spaced-line">so it took me over an HOUR to get there (because, you know, bangalore traffic) but when i eventually DID get there, i looked around and the first thing i saw was a post office. literally RIGHT NEXT TO THE MUSEUM.</p>
-                    <!-- CHANGED: Teal text for quotes changed to white -->
-                    <p class="centered-quote text-white">
-                        <strong>"makes sense... we are at the museum of COMMUNICATIONS after all"</strong>-me, when i saw the post office
+                    <!-- Updated quote styling for retro theme -->
+                    <p class="centered-quote">
+                        <strong>"makes sense... we are at the museum of communications after all"</strong>-me, when i saw the post office
                     </p><br>
                     <p class="spaced-line">anyway, the museum was pretty cool. it had a ton of cool exhibits like old postman uniforms, old telegrams from the early 1900s, those dial-up landline phones and some massive weird-looking device that was supposed to be some kind of transmitter (i don't really remember what its purpose was). unfortunately, they didn't let us take pictures inside, so i can't show you guys what the stuff looked like.</p>
                     <p class="spaced-line">but the thing that REALLY caught my eye was their large collection of stamps from around the world. and i'm not gonna lie, i was kinda jealous. they even had stamps from really obscure places, like tahiti and grenada. then i thought, "why not head into the post office next door and see if they're willing to give up some stamps?" it turns out they weren't.</p>
@@ -354,8 +386,8 @@
                     <p class="spaced-line">
                         when we got to the palace, we were optimistic, but i didn't really know what to expect, because quite a few of my friends, and even my class teacher, advised me against going on this trip.
                     </p>
-                    <!-- CHANGED: Teal text for quotes changed to white -->
-                    <p class="centered-quote text-white">
+                    <!-- Updated quote styling for retro theme -->
+                    <p class="centered-quote">
                         <strong>"what are you gonna do over there, sai? there's literally nothing to do over there. it's a literal wedding venue, for god's sake"</strong>-my class teacher when she found out about me going on the trip
                     </p><br>
                     <p class="spaced-line">
@@ -397,8 +429,8 @@
                     <p class="spaced-line">
                         so there was this one time where i was hanging out with my friends rohan, onion, rench and hanissh (yes, i'm pretty sure his name has the letter s twice) in lunch break at school, just casually roaming around the campus. we were just talking about random stuff when hanissh said...
                     </p>
-                    <!-- CHANGED: Teal text for quotes changed to white -->
-                    <p class="centered-quote text-white">
+                    <!-- Updated quote styling for retro theme -->
+                    <p class="centered-quote">
                         <strong>"if any of you guys can catch me, i'll buy you an ice cream cone from the canteen"</strong>-hanissh
                     </p><br>
                     <p class="spaced-line">
@@ -421,13 +453,13 @@
                     <p class="spaced-line">
                         sorry for the delay, guys.
                         now you might be wondering where i was all this time.
-                        well... i was right here all along, and i was building something magnificent.
+                        well... i was right here all along.
                     </p>
                     <p class="spaced-line">
-                        see, i was never really satisfied with using google sites to build my site. i mean, it looked decent... but you could tell i used a website builder to make it. the actual embeds had to be contained within blocks and that, in my opinion, really limited the website's potential. so i thought, why not just remake this site entirely using html? it seemed difficult at first... but once i had built the homepage (that surprisingly enough, took me just an hour or so), i had found motivation to carry on. over the course of many weeks, i had to juggle studying for my midterms, ACTUALLY WRITING THEM and coding this website in my spare time. but it was all worth it.
+                        see, i was never really satisfied with using google sites to build my site. i mean, it looked decent... but you could tell i used a website builder to make it. the actual embeds had to be contained within blocks and that, in my opinion, really limited the website's potential. so i thought, why not just remake this site entirely using html? it seemed difficult at first... but once i had built the homepage (that surprisingly enough, took me just an hour or so), i had found motivation to carry on. over the course of many weeks, i had to juggle studying for my midterms, actually writing them and coding this website in my spare time. but it was all worth it.
                     </p>
                     <p class="spaced-line">
-                        this is the new swazthings.com,<br>
+                        this is swazthings.com,<br>
                         and this is me signing off.<br>
                         thanks for reading. have a nice day!
                     </p>
@@ -442,49 +474,46 @@
 
     <!-- navigation links at the bottom -->
     <footer class="w-full flex flex-col items-center pb-8 opacity-0 footer-fade-in mt-16">
-        <p class="text-xs sm:text-sm md:text-base tracking-widest font-light mb-4">
+        <p class="text-xs sm:text-sm md:text-base tracking-wider font-light mb-4 text-black">
             swaz things (a website by sai srinivas)
         </p>
-        <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-widest font-light">
-            <a href="index.html" class="hover:text-gray-400 transition-colors duration-200 px-2">home</a>
-            <span class="px-2">·</span>
-            <a href="blog.html" class="text-gray-400 transition-colors duration-200 px-2">blog</a>
-            <span class="px-2">·</span>
-            <a href="media.html" class="hover:text-gray-400 transition-colors duration-200 px-2">media</a>
-            <span class="px-2">·</span>
-            <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
-            <span class="px-2">·</span>
-            <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2">pictures</a>
-            <span class="px-2">·</span>
-            <a href="about.html" class="hover:text-gray-400 transition-colors duration-200 px-2">about</a>
+        <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-wider font-light">
+            <!-- link colors are black on mac background -->
+            <a href="index.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">home</a>
+            <span class="px-2 text-black">·</span>
+            <a href="blog.html" class="text-black transition-colors duration-200 px-2 font-normal">blog</a>
+            <span class="px-2 text-black">·</span>
+            <a href="media.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">media</a>
+            <span class="px-2 text-black">·</span>
+            <a href="projects.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">projects</a>
+            <span class="px-2 text-black">·</span>
+            <a href="pictures.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">pictures</a>
+            <span class="px-2 text-black">·</span>
+            <a href="about.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">about</a>
         </nav>
     </footer>
 
     <script>
-        // Tone.js setup for tap sound
-        const tapSynth = new Tone.MembraneSynth({
-            "pitchDecay" : 0.05,
-            "octaves" : 1,
-            "oscillator" : {
-                "type" : "sine"
-            },
-            "envelope" : {
-                "attack" : 0.001,
-                "decay" : 0.4,
-                "sustain" : 0.01,
-                "release" : 0.05,
-                "attackCurve" : "exponential"
+        // Tone.js setup for a sharper, lower-pitched click sound
+        const clickSynth = new Tone.Synth({
+            oscillator: { type: "square" }, // square wave gives a good digital edge
+            envelope: {
+                attack: 0.001,
+                decay: 0.04, // very short decay for a sharp click
+                sustain: 0,
+                release: 0.04
             }
         }).toDestination();
 
         /**
-         * Plays a short tap sound using Tone.js.
+         * Plays a short, sharp digital click sound.
          */
-        function playTapSound() {
+        function playClickSound() {
             if (Tone.context.state !== 'running') {
                 Tone.start();
             }
-            tapSynth.triggerAttackRelease("C5", "32n");
+            // Trigger a slightly lower frequency (D5) for a more mechanical "click" feel
+            clickSynth.triggerAttackRelease("D5", "32n"); 
         }
 
         // Get references to key elements
@@ -498,7 +527,7 @@
          * @param {string} contentId The ID of the content section to display.
          */
         function showContent(contentId) {
-            playTapSound(); // Play sound on content link click
+            playClickSound(); // Play the new click sound on content link click
 
             // Hide all diary entries and remove the animation class
             allDiaryEntryContentDivs.forEach(id => {

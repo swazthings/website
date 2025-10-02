@@ -17,7 +17,8 @@
             line-height: 1.6;
             margin: 0;
             padding: 20px; /* overall padding around the centered wrapper */
-            background: linear-gradient(to bottom, #000000, #242424);
+            /* UPDATED: Cool, deep blue-black gradient (from very dark navy to black) */
+            background: linear-gradient(to bottom, #050A19, #000000);
             color: #FFFFFF; /* changed to white text */
             min-height: 100vh; /* still needed for full viewport height */
             box-sizing: border-box;
@@ -102,13 +103,13 @@
             text-transform: lowercase; /* ensure lowercase */
         }
 
+        /* CHANGED: Headings are now blue */
         .entry-display-area h3 {
-            color: #00A3A3; /* changed to teal */
+            color: #0048C0; /* changed to a deep royal blue */
             font-size: 2.2em;
             margin-top: 0;
             margin-bottom: 20px;
             text-align: center;
-            /*font-weight: normal;  This rule was overriding the bolding. It has been removed. */
         }
 
         .entry-content p {
@@ -201,6 +202,7 @@
             width: 100%; /* make list items fill the width */
         }
 
+        /* CHANGED: Buttons are now blue */
         .entry-list-grid a {
             text-decoration: none;
             color: #FFFFFF; /* changed to white */
@@ -213,23 +215,23 @@
             width: 150px; /* fixed width for equal size */
             height: 40px; /* fixed height for equal size */
             text-align: center; /* fallback for older browsers */
-            border: 2px solid #00A3A3; /* changed to teal */
+            border: 2px solid #0048C0; /* changed to deep royal blue */
             border-radius: 0; /* unrounded corners for buttons */
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
-            box-shadow: 1px 1px 3px rgba(0, 163, 163, 0.2); /* changed to teal rgba */
+            box-shadow: 1px 1px 3px rgba(0, 72, 192, 0.2); /* changed to blue rgba */
         }
 
         .entry-list-grid a:hover {
-            background-color: #00A3A3; /* changed to teal */
+            background-color: #0048C0; /* changed to deep royal blue */
             color: white; /* white text on hover */
             transform: translateY(-2px);
-            box-shadow: 2px 2px 5px rgba(0, 163, 163, 0.4); /* changed to teal rgba */
+            box-shadow: 2px 2px 5px rgba(0, 72, 192, 0.4); /* changed to blue rgba */
         }
 
         .entry-list-grid a.active {
-            background-color: #00A3A3; /* changed to teal */
+            background-color: #0048C0; /* changed to deep royal blue */
             color: white; /* white text on active number */
-            box-shadow: inset 1px 1px 5px rgba(0, 163, 163, 0.4); /* changed to teal rgba */
+            box-shadow: inset 1px 1px 5px rgba(0, 72, 192, 0.4); /* changed to blue rgba */
             transform: translateY(0); /* no lift when active */
             font-weight: normal; /* not bold */
         }
@@ -302,6 +304,7 @@
                     <li><a href="#" onclick="showContent('entry3'); return false;" data-content-id="entry3">stamps</a></li>
                     <li><a href="#" onclick="showContent('entry4'); return false;" data-content-id="entry4">field trip</a></li>
                     <li><a href="#" onclick="showContent('entry5'); return false;" data-content-id="entry5">ice cream</a></li>
+                    <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">return</a></li>
                 </ul>
             </div>
 
@@ -329,7 +332,8 @@
                     </p>
                     <p class="spaced-line">if you guys didn't know, stamp collecting is a hobby i find pretty interesting. in fact, i just like to learn about stamps and the stories behind them. i even have a massive stamp album at home with a bunch of stamps from india (and the rest of the world as well). so it might come as no surprise at all that this weekend i decided to go to the museum of communications (yes, i'm the type of guy that actually enjoys being in museums). anyway, let me tell you how it went.</p>
                     <p class="spaced-line">so it took me over an HOUR to get there (because, you know, bangalore traffic) but when i eventually DID get there, i looked around and the first thing i saw was a post office. literally RIGHT NEXT TO THE MUSEUM.</p>
-                    <p class="centered-quote text-[#00A3A3]">
+                    <!-- CHANGED: Teal text for quotes changed to white -->
+                    <p class="centered-quote text-white">
                         <strong>"makes sense... we are at the museum of COMMUNICATIONS after all"</strong>-me, when i saw the post office
                     </p><br>
                     <p class="spaced-line">anyway, the museum was pretty cool. it had a ton of cool exhibits like old postman uniforms, old telegrams from the early 1900s, those dial-up landline phones and some massive weird-looking device that was supposed to be some kind of transmitter (i don't really remember what its purpose was). unfortunately, they didn't let us take pictures inside, so i can't show you guys what the stuff looked like.</p>
@@ -350,7 +354,8 @@
                     <p class="spaced-line">
                         when we got to the palace, we were optimistic, but i didn't really know what to expect, because quite a few of my friends, and even my class teacher, advised me against going on this trip.
                     </p>
-                    <p class="centered-quote text-[#00A3A3]">
+                    <!-- CHANGED: Teal text for quotes changed to white -->
+                    <p class="centered-quote text-white">
                         <strong>"what are you gonna do over there, sai? there's literally nothing to do over there. it's a literal wedding venue, for god's sake"</strong>-my class teacher when she found out about me going on the trip
                     </p><br>
                     <p class="spaced-line">
@@ -392,7 +397,8 @@
                     <p class="spaced-line">
                         so there was this one time where i was hanging out with my friends rohan, onion, rench and hanissh (yes, i'm pretty sure his name has the letter s twice) in lunch break at school, just casually roaming around the campus. we were just talking about random stuff when hanissh said...
                     </p>
-                    <p class="centered-quote text-[#00A3A3]">
+                    <!-- CHANGED: Teal text for quotes changed to white -->
+                    <p class="centered-quote text-white">
                         <strong>"if any of you guys can catch me, i'll buy you an ice cream cone from the canteen"</strong>-hanissh
                     </p><br>
                     <p class="spaced-line">
@@ -405,6 +411,31 @@
                         and as always, thanks for reading. have a nice day!
                     </p>
                 </div>
+                
+                <!-- NEW ENTRY 6: I RETURN -->
+                <div id="entry6" class="entry-content" style="display: none;">
+                    <h3 class="font-bold">and so i return...</h3>
+                    <p class="spaced-line">
+                        (2/10/2025)
+
+                    <p class="spaced-line">
+                        sorry for the delay, guys.
+                        now you might be wondering where i was all this time.
+                        well... i was right here all along.
+                    </p>
+                    <p class="spaced-line">
+                        see, i was never really satisfied with using google sites to build my site. i mean, it looked decent... but you could tell i used a website builder to make it. the actual embeds had to be contained within blocks and that, in my opinion, really limited the website's potential. so i thought, why not just remake this site entirely using html? it seemed difficult at first... but once i had built the homepage (that surprisingly enough, took me just an hour or so), i had found motivation to carry on. over the course of many weeks, i had to juggle studying for my midterms, ACTUALLY WRITING THEM and coding this website in my spare time. but it was all worth it.
+                    </p>
+                    <p class="spaced-line">
+                        this is swazthings.com,<br>
+                        and this is me signing off.<br>
+                        thanks for reading. have a nice day!
+                    </p>
+                    <p class="spaced-line">
+                        (p.s. i'm going on vacation to udupi tomorrow, stay tuned for a blog about my experiences there coming soon)
+                    </p>
+                </div>
+
             </div>
         </div>
     </div>
@@ -421,7 +452,7 @@
             <span class="px-2">·</span>
             <a href="media.html" class="hover:text-gray-400 transition-colors duration-200 px-2">media</a>
             <span class="px-2">·</span>
-            <a href="#" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
+            <a href="projects.html" class="hover:text-gray-400 transition-colors duration-200 px-2">projects</a>
             <span class="px-2">·</span>
             <a href="pictures.html" class="hover:text-gray-400 transition-colors duration-200 px-2">pictures</a>
             <span class="px-2">·</span>
@@ -460,7 +491,7 @@
         const noEntrySelectedMessage = document.getElementById('noEntrySelected');
 
         // List of all diary entry content IDs
-        const allDiaryEntryContentDivs = ['entry1', 'entry3', 'entry4', 'entry5'];
+        const allDiaryEntryContentDivs = ['entry1', 'entry3', 'entry4', 'entry5', 'entry6'];
 
         /**
          * Displays a specific content section and updates the active link in the grid.

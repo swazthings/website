@@ -7,16 +7,16 @@
     <title>swaz things - projects</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for Monomakh -->
+    <!-- Google Fonts for Monomakh and Roboto Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Monomakh&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Monomakh&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             /* A subtle dark background for the overall app */
             background-color: black;
-            /* Main content font is now Helvetica */
-            font-family: 'Helvetica', 'Arial', sans-serif;
+            /* UPDATED: Main content font is now Roboto Mono */
+            font-family: 'Roboto Mono', monospace, sans-serif;
             color: #ffffff; /* A light gray for contrast */
             padding: 2rem;
         }
@@ -65,7 +65,6 @@
             animation: fadeIn 1.5s ease-out forwards;
         }
 
-        /* Specific style for the footer to use Monomakh in bold */
         .footer-font {
             font-family: 'Monomakh', sans-serif;
             font-weight: bold;
@@ -74,25 +73,25 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Main content container with fade-in animation -->
     <main class="flex-1 flex flex-col items-center justify-start p-4 text-white animate-fadeIn">
         <div class="section-container mx-auto p-4 md:p-8 rounded-lg relative text-center">
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 uppercase tracking-widest pt-12 text-white">
-                projects
+                p r o j e c t s
             </h1>
             <p class="text-sm sm:text-base md:text-lg mb-8 tracking-wide font-light">
                 here's some cool stuff i made, click on a link to view a project :)
             </p>
-            <nav class="flex text-base sm:text-lg md:text-xl uppercase tracking-widest font-light">
-                <a href="calendar.html" class="hover:text-[#ff0000] transition-colors duration-200 px-2 text-red-700">calendar</a>
+            <!-- UPDATED: Added justify-center to the navigation bar to horizontally center the links -->
+            <nav class="flex justify-center text-base sm:text-lg md:text-xl uppercase tracking-widest font-light">
+                <a href="calendar.html" class="text-[#0048C0] hover:text-white transition-colors duration-200 px-2">calendar</a>
                 <span class="px-2 text-white">·</span>
-                <a href="dice.html" class="hover:text-[#ff0000] transition-colors duration-200 px-2 text-red-700">dice roller</a>
+                <a href="dice.html" class="text-[#0048C0] hover:text-white transition-colors duration-200 px-2">dice roller</a>
                 <span class="px-2 text-white">·</span>
                 <div class="dropdown-nav">
-                    <a href="#" class="hover:text-[#ff0000] transition-colors duration-200 px-2 text-red-700">swaz explainers</a>
+                    <a href="#" class="text-[#0048C0] hover:text-white transition-colors duration-200 px-2">swaz explainers</a>
                     <div class="dropdown-content">
-                        <a href="microbes.html" class="text-sm transition-colors duration-200 py-1 text-red-700 hover:text-[#ff0000]">microbes</a>
-                        <a href="defects-of-the-eye.html" class="text-sm transition-colors duration-200 py-1 text-red-700 hover:text-[#ff0000]">defects of the eye</a>
+                        <a href="microbes.html" class="text-sm transition-colors duration-200 py-1 text-[#0048C0] hover:text-white">microbes</a>
+                        <a href="defects-of-the-eye.html" class="text-sm transition-colors duration-200 py-1 text-[#0048C0] hover:text-white">defects of the eye</a>
                     </div>
                 </div>
             </nav>

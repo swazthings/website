@@ -8,7 +8,7 @@
     <!-- Include Tailwind CSS library for layout utilities -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font: Changed to Roboto Mono (a modern monospaced font) -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght400;700&display=swap" rel="stylesheet">
     <style>
         /*
         ** MACINTOSH 1980S/SYSTEM 7 STYLING **
@@ -96,30 +96,6 @@
             font-weight: bold;
         }
         
-        /* Window close/control button (non-functional) */
-        .window-controls {
-            position: absolute;
-            left: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 9px;
-            height: 9px;
-            background-color: var(--mac-white);
-            border: 1px solid var(--mac-black);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .window-controls:before {
-            content: 'x'; /* Mac close button icon */
-            font-size: 8px;
-            line-height: 0;
-            color: var(--mac-black);
-            font-family: monospace;
-        }
-        
-
         /* diary content section */
         .diary-content {
             flex-grow: 1;
@@ -169,13 +145,7 @@
             font-style: italic;
             box-shadow: 1px 1px 0 0 var(--mac-black);
         }
-        .centered-quote strong {
-            display: block;
-            font-style: normal;
-            font-weight: bold;
-            color: var(--mac-black);
-            margin-bottom: 5px;
-        }
+        /* Removed .centered-quote strong styling */
 
         /* table of contents (entry list) - sidebar */
         .entry-list-grid {
@@ -233,6 +203,78 @@
             border-color: var(--mac-black);
             box-shadow: none;
             transform: none;
+        }
+
+        /* --- Collapsible Series Styling --- */
+        .collapsible-series {
+            width: 100%;
+        }
+
+        .series-details {
+            margin-bottom: 2px;
+            border: 1px solid var(--mac-black);
+            background-color: var(--mac-light-gray); /* Slightly darker background for the group header */
+            border-radius: 0;
+            width: 100%;
+        }
+
+        .series-summary {
+            font-weight: bold;
+            padding: 4px 6px;
+            cursor: pointer;
+            list-style: none; /* Remove default triangle in some browsers */
+            display: block;
+        }
+        
+        /* FIX: HIDE THE NATIVE TRIANGLE ACROSS BROWSERS */
+        .series-details > .series-summary {
+            list-style: none; /* remove for firefox */
+        }
+        .series-details > .series-summary::-webkit-details-marker {
+            display: none; /* remove for webkit (chrome/safari) */
+        }
+        
+        /* Custom arrow/indicator for the summary */
+        .series-summary::before {
+            content: '►'; /* Right arrow (closed) */
+            font-size: 0.8em;
+            margin-right: 5px;
+            transition: transform 0.1s;
+            display: inline-block;
+        }
+        
+        .series-details[open] > .series-summary::before {
+            content: '▼'; /* Down arrow (open) */
+        }
+        
+        /* Style the list of items inside the series */
+        .series-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            /* Indent the list for a hierarchical view */
+            padding-left: 10px !important; 
+            background-color: var(--mac-white);
+            border-top: 1px solid var(--mac-black);
+            box-sizing: border-box;
+        }
+
+        .series-list li {
+            margin-top: 2px;
+        }
+        
+        .series-list a {
+            border: none; /* Links inside the series group are just text/hover */
+            background-color: var(--mac-white);
+            box-shadow: none;
+            padding: 4px 6px;
+        }
+
+        /* Reset the active state for series links to look like regular links */
+        .series-list a.active {
+             background-color: var(--mac-black);
+             color: var(--mac-white);
+             border-color: var(--mac-black);
         }
 
         /* Image container and caption styles */
@@ -307,8 +349,34 @@
                 min-width: 60px;
                 text-align: center;
             }
+            .entry-list-grid a.active {
+                /* ensure active links look correct in responsive list */
+                background-color: var(--mac-black);
+                color: var(--mac-white);
+            }
             .entry-display-area h3 {
                 font-size: 1.3em;
+            }
+
+            /* Responsive adjustments for series */
+            .collapsible-series {
+                width: 100%; /* Take full width */
+                margin-top: 5px;
+            }
+            .series-details {
+                border: 1px solid var(--mac-black);
+            }
+            .series-list {
+                padding-left: 0 !important;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .series-list li {
+                width: auto;
+            }
+            .series-list a {
+                border: 1px solid var(--mac-black);
             }
         }
     </style>
@@ -321,7 +389,6 @@
         
         <!-- Mac Window Title Bar -->
         <div class="window-title-bar">
-            <div class="window-controls"></div>
             swaz blogs
         </div>
 
@@ -336,6 +403,16 @@
                     <li><a href="#" onclick="showContent('entry5'); return false;" data-content-id="entry5">ice cream</a></li>
                     <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">return</a></li>
                 </ul>
+
+                <div class="collapsible-series">
+                    <details class="series-details">
+                        <summary class="series-summary">udupi series</summary>
+                        <ul class="series-list">
+                            <li><a href="#" onclick="showContent('entry7'); return false;" data-content-id="entry7">udupi trip</a></li>
+                        </ul>
+                    </details>
+                </div>
+
             </div>
 
             <!-- main entry display area -->
@@ -345,6 +422,7 @@
                 <div id="noEntrySelected" class="no-entry-selected">
                     read my blogs here!
                 </div>
+                
                 <!-- diary entry 1 -->
                 <div id="entry1" class="entry-content" style="display: none;">
                     <h3 class="font-bold">this is my blog.</h3>
@@ -364,9 +442,8 @@
                     </p>
                     <p class="spaced-line">if you guys didn't know, stamp collecting is a hobby i find pretty interesting. in fact, i just like to learn about stamps and the stories behind them. i even have a massive stamp album at home with a bunch of stamps from india (and the rest of the world as well). so it might come as no surprise at all that this weekend i decided to go to the museum of communications (yes, i'm the type of guy that actually enjoys being in museums). anyway, let me tell you how it went.</p>
                     <p class="spaced-line">so it took me over an HOUR to get there (because, you know, bangalore traffic) but when i eventually DID get there, i looked around and the first thing i saw was a post office. literally RIGHT NEXT TO THE MUSEUM.</p>
-                    <!-- Updated quote styling for retro theme -->
                     <p class="centered-quote">
-                        <strong>"makes sense... we are at the museum of communications after all"</strong>-me, when i saw the post office
+                        "makes sense... we are at the museum of communications after all"<br>-me, when i saw the post office
                     </p><br>
                     <p class="spaced-line">anyway, the museum was pretty cool. it had a ton of cool exhibits like old postman uniforms, old telegrams from the early 1900s, those dial-up landline phones and some massive weird-looking device that was supposed to be some kind of transmitter (i don't really remember what its purpose was). unfortunately, they didn't let us take pictures inside, so i can't show you guys what the stuff looked like.</p>
                     <p class="spaced-line">but the thing that REALLY caught my eye was their large collection of stamps from around the world. and i'm not gonna lie, i was kinda jealous. they even had stamps from really obscure places, like tahiti and grenada. then i thought, "why not head into the post office next door and see if they're willing to give up some stamps?" it turns out they weren't.</p>
@@ -386,15 +463,15 @@
                     <p class="spaced-line">
                         when we got to the palace, we were optimistic, but i didn't really know what to expect, because quite a few of my friends, and even my class teacher, advised me against going on this trip.
                     </p>
-                    <!-- Updated quote styling for retro theme -->
+                    <!-- Updated quote styling: removed strong tag -->
                     <p class="centered-quote">
-                        <strong>"what are you gonna do over there, sai? there's literally nothing to do over there. it's a literal wedding venue, for god's sake"</strong>-my class teacher when she found out about me going on the trip
+                        "what are you gonna do over there, sai? there's literally nothing to do over there. it's a literal wedding venue, for god's sake"<br>-my class teacher when she found out about me going on the trip
                     </p><br>
                     <p class="spaced-line">
                         well, she and my friends may not have been completely wrong (there were a ton of wedding venues near the palace, including one within the palace complex... "palace grounds" is full of those) but i genuinely had a good time there! 
                     </p>
                     <p class="spaced-line">
-                        as we entered the place, we noticed that there was a japanese dude outside who visibly seemed to be struggling with something. then a security guard there asked me and my friends aarush and ishaan if we knew english. we said "of course" (not immediately realizing that the security guard didn't know english himself) and got to helping that japanese dude. he said "i wanna buy a ticket, can you help?" (he didn't know kannada), to which i replied "i don't think so, the school arranged our tickets." then ishaan (not knowing what to do) said "sayonara" and then walked away. well, at least the japanese bloke said "that was very good japanese." ISHAAN SAID ONE WORD. HIS ENTIRE KNOWLEDGE OF JAPANESE IS FROM THE FIRST DUOLINGO UNIT. in retrospect, i think the japanese guy was trying to be nice. but we let that slide, said our goodbyes to the man and followed ishaan into the palace.
+                        as we entered the place, we noticed that there was a japanese dude outside who visibly seemed to be struggling with something. then a security guard there asked me and my friends aarush and ishaan if we knew english. we said "of course" (not immediately realizing that the security guard didn't know english himself) and got to helping that japanese dude. he said "i wanna buy a ticket, can you help?" (he didn't know kannada), to which i replied "i don't think so, the school arranged our tickets." then ishaan (not knowing what to do) said "sayonara" and then walked away. well, at least the japanese bloke said "that was very good japanese." ishaan said one word. his entire knowledge of japanese is from the first duolingo unit. in retrospect, i think the japanese guy was trying to be nice. but we let that slide, said our goodbyes to the man and followed ishaan into the palace.
                     </p>
                     <p class="spaced-line">
                         anyway, there were a ton of cool exhibits there. if you've read stamps, you might know that i enjoy being in museums. there was some insanely cool stuff like a russian pool table from some bygone era, royal portraits, animal parts from the maharajas' hunting expeditions and a ton of awesome-looking paintings, including some by the legendary painter raja ravi varma. i really enjoyed looking at them. the only downside was that there was a lot of nudity in the paintings, but let's not talk about that... 
@@ -429,9 +506,9 @@
                     <p class="spaced-line">
                         so there was this one time where i was hanging out with my friends rohan, onion, rench and hanissh (yes, i'm pretty sure his name has the letter s twice) in lunch break at school, just casually roaming around the campus. we were just talking about random stuff when hanissh said...
                     </p>
-                    <!-- Updated quote styling for retro theme -->
+                    <!-- Updated quote styling: removed strong tag -->
                     <p class="centered-quote">
-                        <strong>"if any of you guys can catch me, i'll buy you an ice cream cone from the canteen"</strong>-hanissh
+                        "if any of you guys can catch me, i'll buy you an ice cream cone from the canteen"<br>-hanissh
                     </p><br>
                     <p class="spaced-line">
                         so then he started to run away from us. if you guys didn't realize by now, hanissh is one of the fastest guys i know. and i'm not exactly the fastest guy alive. anyway, we all instantly started chasing after him. but then he just vanished. then i thought i wouldn't stand a chance. i just turned around, gave up and started walking away. but that's when i saw rohan right behind hanissh. and they were running my way. freshly incentivized, i simply got right in front of him and tagged him. and, true to his word, he bought me a strawberry ice cream cone. it cost just 10 rupees, but was it worth it? of course it was. well i personally tend to appreciate things more when they're free.
@@ -444,7 +521,6 @@
                     </p>
                 </div>
                 
-                <!-- NEW ENTRY 6: I RETURN -->
                 <div id="entry6" class="entry-content" style="display: none;">
                     <h3 class="font-bold">and so i return...</h3>
                     <p class="spaced-line">
@@ -465,6 +541,40 @@
                     </p>
                     <p class="spaced-line">
                         (p.s. i'm going on vacation to udupi tomorrow, stay tuned for a blog about my experiences there coming soon)
+                    </p>
+                </div>
+
+                <div id="entry7" class="entry-content" style="display: none;">
+                    <h3 class="font-bold">day one in udupi (very long read)</h3>
+                    <p class="spaced-line">
+                        (3/10/2025)
+                    </p>
+                    <p class="spaced-line">
+                        well, i am currently in udupi... and forget "temple run", today felt like a temple marathon.
+                    </p>
+                    <p class="spaced-line">
+                        you see, when my parents told me we were going to udupi, my first thoughts were of beaches and good food. as a subscriber of "dct eats", i had heard great things about udupi (especially about the food), not to mention the fact that there are two udupi restaurants within a kilometre of my house. so i least expected that we'd be going to not one, not two, but five temples in one day. but it happened. let me explain.
+                    </p>
+                    <p class="spaced-line">
+                        today i woke up at the ungodly time of 4:30 am. yes, i know it's outrageous. i usually wake up at 10 am on holidays, but my dad said that we had to beat the bangalore traffic on the way out. so i said "that's fair" and hopped into our car. now udupi is 400 kilometres from the city of immigrants and potholes that i call home. so, as you can probably tell by now, the drive took a long, long time. we even stopped at dharmasthala on the way, which oddly enough, in my opinion, felt like a temple in kerala, despite being in karnataka. the waiting hall was massive and well-decorated. it even had a concession stand from which i got myself a dairy day mango bar. delicious. and the interior of the temple was one of the most splendid things i've witnessed; it was so elegant. i personally thought the wooden motifs looked really nice on the stone walls. the idols looked great as well. i highly recommend visiting dharmasthala, there's even a heritage museum next to the temple, and you already know i'm a sucker for museums. but unfortunately, i didn't go there today, maybe next time i go there i will.
+                    </p>
+                    <p class="spaced-line">
+                        then we visited a temple dedicated to lord rama that the people there apparently called 'dakshina ayodhya.' that was a pretty cool experience. the temple wasn't really crowded, so we got done with it pretty quickly. but that temple was pretty cool as well.
+                    </p>
+                    <p class="spaced-line">
+                        at this point, i think it's worth noting that when we stopped at dharmasthala it was about 11:20 am, by the time we left this temple it was about 2 pm, and we reached udupi by about 4:15 pm. and at that point, i was a bit tired from all the roaming, as well as sitting in the car for hours. but little had i known, our adventure had only just begun, because only a few minutes later, as the sun began to set...
+                    </p>
+                    <p class="spaced-line">
+                        we walked from our hotel to the krishna temple complex, where melodious bhajans filled the air. i was pumped at first because not only was the place peaceful, but i also would soon get to try food at the famous mitra samaj restaurant. and when i got there, the place was absolutely packed. we had to wait to get seated, but luckily for us, the wait wasn't long. i tried their "bullet idlis" (these are just mini idlis dipped in sambar), mangalore buns, masala dosa and "gojji bajji" (essentially just what we call bonda in tamil nadu, it tasted mild. i think it's overhyped). but aside from the bondas, the food was decent overall. the mangalore buns slapped harder than your dad's belt, and the masala dosa was just perfection on a plate. i washed it all down with their rose milk. my one problem with their food was that their chutney was average at best. overall, i'd give mitra samaj an 8 out of 10.
+                    </p>
+                    <p class="spaced-line">
+                        after that we went to the anantheshwar and chandrachoodeshwar temples, both dedicated to shiva. and here's a fun fact: they're apparently older than the krishna temple and hold great cultural significance. they were small but beautiful, and they offered a sense of tranquility. but then it was time for the krishna temple. legend has it that kanakadasa, a famous poet in karnataka, but also a member of a lower caste, wasn't allowed inside this temple due to his social background, but he worshipped krishna through a crack in the wall, noticing this devotion, lord krishna supposedly turned to face him. even to this day, devotees can only see krishna through the hole in the wall. the temple was crowded but we got up close to the idol and worshipped him. and let me tell you, words cannot tell you how good i felt in that moment. you know, i never really thought religion was all it was made out to be, but it's moments like this that really make you feel alive.
+                    </p>
+                    <p class="spaced-line">
+                        all in all, today was a really tiring yet exciting day, and i'm writing this at 10:44 pm because i thought i'd use the last bits of my energy to write this blog post.
+                    </p>
+                    <p class="spaced-line">
+                        thanks for reading, have a nice day, and stay tuned for part two coming soon!
                     </p>
                 </div>
 
@@ -519,8 +629,8 @@
         // Get references to key elements
         const noEntrySelectedMessage = document.getElementById('noEntrySelected');
 
-        // List of all diary entry content IDs
-        const allDiaryEntryContentDivs = ['entry1', 'entry3', 'entry4', 'entry5', 'entry6'];
+        // List of all diary entry content IDs - UPDATED
+        const allDiaryEntryContentDivs = ['entry1', 'entry3', 'entry4', 'entry5', 'entry6', 'entry7'];
 
         /**
          * Displays a specific content section and updates the active link in the grid.

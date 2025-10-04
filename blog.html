@@ -395,17 +395,18 @@
             <div class="entry-list-grid">
                 <ul>
                     <li><a href="#" onclick="showContent('entry1'); return false;" data-content-id="entry1">introduction</a></li>
-                    <li><a href="#" onclick="showContent('entry3'); return false;" data-content-id="entry3">stamps</a></li>
-                    <li><a href="#" onclick="showContent('entry4'); return false;" data-content-id="entry4">field trip</a></li>
-                    <li><a href="#" onclick="showContent('entry5'); return false;" data-content-id="entry5">ice cream</a></li>
-                    <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">return</a></li>
+                    <li><a href="#" onclick="showContent('entry2'); return false;" data-content-id="entry2">stamps</a></li>
+                    <li><a href="#" onclick="showContent('entry3'); return false;" data-content-id="entry3">field trip</a></li>
+                    <li><a href="#" onclick="showContent('entry4'); return false;" data-content-id="entry4">ice cream</a></li>
+                    <li><a href="#" onclick="showContent('entry5'); return false;" data-content-id="entry5">return</a></li>
                 </ul>
 
                 <div class="collapsible-series">
                     <details class="series-details">
-                        <summary class="series-summary">udupi series</summary>
+                        <summary class="series-summary">trip to udupi<br>(in blogs)</summary>
                         <ul class="series-list">
-                            <li><a href="#" onclick="showContent('entry7'); return false;" data-content-id="entry7">day one</a></li>
+                            <li><a href="#" onclick="showContent('entry6'); return false;" data-content-id="entry6">day one</a></li>
+                            <li><a href="#" onclick="showContent('entry7'); return false;" data-content-id="entry7">day two</a></li>
                         </ul>
                     </details>
                 </div>
@@ -416,9 +417,7 @@
             <div id="entryDisplayArea" class="entry-display-area">
                 <!-- Title Strip - Removed the old title strip as it's now in the window-title-bar -->
 
-                <div id="noEntrySelected" class="no-entry-selected">
-                    read my blogs here!
-                </div>
+                <div id="noEntrySelected" class="no-entry-selected">read my blogs here!</div>
                 
                 <!-- diary entry 1 -->
                 <div id="entry1" class="entry-content" style="display: none;">
@@ -436,7 +435,7 @@
                 </div>
 
                 <!-- diary entry 3 (now effectively "Entry 2" in the UI) -->
-                <div id="entry3" class="entry-content" style="display: none;">
+                <div id="entry2" class="entry-content" style="display: none;">
                     <h3 class="font-bold">stamps</h3>
                     <p class="spaced-line">
                         (12/7/2025)
@@ -453,20 +452,18 @@
                 </div>
 
                 <!-- new entry 4 (now effectively "Entry 3" in the UI) -->
-                <div id="entry4" class="entry-content" style="display: none;">
+                <div id="entry3" class="entry-content" style="display: none;">
                     <h3 class="font-bold">field trip *</h3>
                     <p class="spaced-line">
                         (5/8/2025)
                     </p>
                     <p class="spaced-line">
-                        so today me and a bunch of other people from school went on a field trip to the bangalore palace! we all hopped on a bus at about 8:40 am that was gonna take us there. it took like 1 and a half hours to get there (because it's bangalore), but luckily for us, the palace only opens for visitors at 10. on the way there, we decided to have some fun. we started singing random songs at the top of our voices. but then two girls in the back sang "if you're happy and you know it, clap your hands" and that kinda ruined the vibe.
-                    </p>
+                        so today me and a bunch of other people from school went on a field trip to the bangalore palace! we all hopped on a bus at about 8:40 am that was gonna take us there. it took like 1 and a half hours to get there (because it's bangalore), but luckily for us, the palace only opens for visitors at 10. on the way there, we decided to have some fun. we started singing random songs at the top of our voices. but then two girls in the back sang "if you're happy and you know it, clap your hands" and that kinda ruined the vibe.</p>
                     <p class="spaced-line">
                         when we got to the palace, we were optimistic, but i didn't really know what to expect, because quite a few of my friends, and even my class teacher, advised me against going on this trip.
                     </p>
-                    <!-- Updated quote styling: removed strong tag -->
                     <p class="centered-quote">
-                        "what are you gonna do over there, sai? there's literally nothing to do over there. it's a literal wedding venue, for god's sake"<br>-my class teacher when she found out about me going on the trip
+                        "what are you gonna do over there, sai? there's literally nothing to do there. it's a literal wedding venue, for god's sake"<br>-my class teacher when she found out about me going on the trip
                     </p><br>
                     <p class="spaced-line">
                         well, she and my friends may not have been completely wrong (there were a ton of wedding venues near the palace, including one within the palace complex... "palace grounds" is full of those) but i genuinely had a good time there! 
@@ -499,7 +496,7 @@
                 </div>
 
                 <!-- Entry 5 (using id="entry5") -->
-                <div id="entry5" class="entry-content" style="display: none;">
+                <div id="entry4" class="entry-content" style="display: none;">
                     <h3 class="font-bold">ice cream</h3>
                     <p class="spaced-line">
                         (20/8/2025)
@@ -522,10 +519,10 @@
                     </p>
                 </div>
                 
-                <div id="entry6" class="entry-content" style="display: none;">
+                <div id="entry5" class="entry-content" style="display: none;">
                     <h3 class="font-bold">and so i return...</h3>
                     <p class="spaced-line">
-                        (2/10/2025)
+                        (28/9/2025)
 
                     <p class="spaced-line">
                         sorry for the delay, guys.
@@ -541,12 +538,12 @@
                         thanks for reading. have a nice day!
                     </p>
                     <p class="spaced-line">
-                        (p.s. i'm going on vacation to udupi tomorrow, stay tuned for a blog about my experiences there coming soon)
+                        (p.s. i'm going on vacation to udupi on friday, stay tuned for a blog about my experiences there coming soon)
                     </p>
                 </div>
 
-                <div id="entry7" class="entry-content" style="display: none;">
-                    <h3 class="font-bold">day one in udupi *</h3>
+                <div id="entry6" class="entry-content" style="display: none;">
+                    <h3 class="font-bold">🌴 day one in udupi *</h3>
                     <p class="spaced-line">
                         (3/10/2025)
                     </p>
@@ -557,7 +554,7 @@
                         you see, when my parents told me we were going to udupi, my first thoughts were of beaches and good food. as a subscriber of "dct eats", i had heard great things about udupi (especially about the food), not to mention the fact that there are two udupi restaurants within a kilometre of my house. so i least expected that we'd be going to not one, not two, but five temples in one day. but it happened. let me explain.
                     </p>
                     <p class="spaced-line">
-                        today i woke up at the ungodly time of 4:30 am. yes, i know it's outrageous. i usually wake up at 10 am on holidays, but my dad said that we had to beat the bangalore traffic on the way out. so i said "that's fair" and hopped into our car. now udupi is 400 kilometres from the city of immigrants and potholes that i call home. so, as you can probably tell by now, the drive took a long, long time. we even stopped at dharmasthala on the way, which oddly enough, in my opinion, felt like a temple in kerala, despite being in karnataka. the waiting hall was massive and well-decorated. it even had a concession stand from which i got myself a dairy day mango bar. delicious. and the interior of the temple was one of the most splendid things i've witnessed; it was so elegant. i personally thought the wooden motifs looked really nice on the stone walls. the idols looked great as well. i highly recommend visiting dharmasthala, there's even a heritage museum next to the temple, and you already know i'm a sucker for museums. but unfortunately, i didn't go there today. maybe next time i go there i will.
+                        today i woke up at the ungodly time of 4:30 am. yes, i know it's outrageous. i usually wake up at 10 am on holidays, but my dad said that we had to beat the bangalore traffic on the way out. so i said "that's fair" and hopped into our car. now udupi is 400 kilometres from the city of immigrants and potholes that i call home. so, as you can probably tell by now, the drive took a long, long time. we even stopped at dharmasthala on the way, which oddly enough, in my opinion, felt like a temple in kerala, despite being in karnataka. the waiting hall was massive and well-decorated. it even had a concession stand from which i got myself a dairy day mango bar. delicious. and the interior of the temple was one of the most splendid things i've witnessed; it was so elegant. i personally thought the wooden motifs looked really nice on the stone walls. the idols looked great as well. i highly recommend visiting dharmasthala. there's even a heritage museum next to the temple, and you already know i'm a sucker for museums. but unfortunately, i didn't go there today. maybe next time i go there i will.
                     </p>
                     <p class="spaced-line">
                         then we visited a temple dedicated to lord rama that the people there apparently called 'dakshina ayodhya.' that was a pretty cool experience. the temple wasn't really crowded, so we got done with it pretty quickly. but that temple was pretty cool as well.
@@ -566,19 +563,38 @@
                         at this point, i think it's worth noting that when we stopped at dharmasthala it was about 11:20 am, by the time we left this temple it was about 2 pm, and we reached udupi by about 4:15 pm. and at that point, i was a bit tired from all the roaming, as well as sitting in the car for hours. but little had i known, our adventure had only just begun, because only a few minutes later, as the sun began to set...
                     </p>
                     <p class="spaced-line">
-                        we walked from our hotel to the krishna temple complex, where melodious bhajans filled the air. i was pumped at first because not only was the place peaceful, but i also would soon get to try food at the famous mitra samaj restaurant. and when i got there, the place was absolutely packed. we had to wait to get seated, but luckily for us, the wait wasn't long. i tried their "bullet idlis" (these are just mini idlis dipped in sambar), mangalore buns, masala dosa and "goli baje" (essentially just what we call bonda in tamil nadu, it tasted mild. i think it's overhyped). but aside from the bondas, the food was decent overall. the mangalore buns slapped harder than your dad's belt, and the masala dosa was just perfection on a plate. i washed it all down with their rose milk. my one problem with their food was that their chutney was average at best. overall, i'd give mitra samaj an 8 out of 10.
+                        we walked from our hotel to the krishna temple complex, where melodious bhajans filled the air. i was pumped at first because not only was the place peaceful, but i also would soon get to try food at the famous mitra samaj restaurant, WHERE MASALA DOSA WAS INVENTED. and when i got there, the place was absolutely packed. we had to wait to get seated, but luckily for us, the wait wasn't long. i tried their "bullet idlis" (these are just mini idlis dipped in sambar), mangalore buns, masala dosa and "goli baje" (essentially just what we call bonda in tamil nadu, it tasted mild. i think it's overhyped). but aside from the bondas, the food was decent overall. the mangalore buns slapped harder than your dad's belt, and the masala dosa was just perfection on a plate. i washed it all down with their rose milk. my one problem with their food was that their chutney was average at best. overall, i'd give mitra samaj an 8 out of 10.
                     </p>
                     <p class="spaced-line">
-                        after that we went to the anantheshwar and chandrachoodeshwar temples, both dedicated to shiva. and here's a fun fact- they're apparently older than the krishna temple and hold great cultural significance. they were small but beautiful, and they offered a sense of tranquility. but then it was time for the krishna temple. legend has it that kanakadasa, a famous poet in karnataka, but also a member of a lower caste, wasn't allowed inside this temple due to his social background, but he worshipped krishna through a crack in the wall, noticing this devotion, lord krishna supposedly turned to face him. even to this day, devotees can only see krishna through the hole in the wall. the temple was crowded but we got up close to the idol and worshipped him. and let me tell you, words cannot tell you how good i felt in that moment. you know, i never really thought religion was all it was made out to be, but it's moments like this that really make you feel alive.
+                        after that we went to the anantheshwar and chandrachoodeshwar temples, both dedicated to shiva. and here's a fun fact- they're apparently older than the krishna temple and hold great cultural significance. they were small but beautiful, and they offered a sense of tranquility. but then it was time for the main event- the krishna temple. legend has it that kanakadasa, a famous poet in karnataka, but also a member of a lower caste, wasn't allowed inside this temple due to his social background, but he worshipped krishna through a crack in the wall, noticing this devotion, lord krishna supposedly turned to face him. even to this day, devotees can only see krishna through the hole in the wall. the temple was crowded but we got up close to the idol and worshipped him. and let me tell you, words cannot tell you how good i felt in that moment. you know, i never really thought religion was all it was made out to be, but it's moments like this that really make you feel alive.
                     </p>
                     <p class="spaced-line">
                         all in all, today was a really tiring yet exciting day, and i'm writing this at 10:44 pm because i thought i'd use the last bits of my energy to write this blog post.
                     </p>
                     <p class="spaced-line">
-                        if you made it this far, thanks for reading! have a nice day, and stay tuned for part two coming soon :)
+                        if you made it this far, thanks for reading! have a nice day, and stay tuned for more coming tomorrow :)
                     </p>
                 </div>
-
+                <div id="entry7" class="entry-content" style="display: none;">
+                    <h3 class="font-bold">🌴 day two in udupi, part one  *</h3>
+                    <p class="spaced-line">
+                        (4/10/2025)
+                    </p>
+                    <p class="spaced-line">
+                        well, i guess today was pretty fun. i thought 5 temples was enough religion for this trip, but i ended up going to ANOTHER temple today as well. BUT… on the bright side, i went to two beaches and two museums. and we ate at two iconic restaurants in this city. and i just realized i went to TWO restaurants, beaches and museums on day TWO of being here. that’s kinda crazy.
+                    </p>
+                    <p class="spaced-line">
+                        so today i woke up at about 6 am (yep, that’s still pretty early, but at least it’s not 4:30) and got ready to head to malpe beach. but just as i was about to leave, it started raining. and i don’t think i should be calling it just “rain”. it was a literal DOWNPOUR. so we didn’t leave until about an hour later, when the rain stopped. it took us about half an hour to get to malpe beach even though it was only 6 kilometres from our hotel, and i think that’s mostly because the roads were absolutely horrendous. there were so many potholes that i felt like i was in bangalore again.the beach was insanely crowded… but it was clean. i took a bunch of cool photos there.
+                    <p class="spaced-line">
+                        then we went to the woodlands restaurant for breakfast. and i was shocked to see that the place was even more packed than mitra samaj. THERE WAS A LITERAL QUEUE OUTSIDE THE RESTAURANT TO ENTER. luckily for us, we didn’t have to wait long to get in. and the food? absolutely amazing. i’d rate it no less than a 9.5 out of 10. i tried their open podi masala dosa… and it was so good i had two. their mangalore buns were decent but cold, and you just know i had to get their rose milk! i just love rose milk. it is one of the best drinks of all time.
+                    </p>
+                    <p class="spaced-line">
+                        we then went to hastashilpa heritage village in manipal. if you’re wondering what it is, it’s essentially just an open-air museum with a bunch of big old houses that have either been remade or restored, with a bunch of cool antique objects inside them. and if you ask me, i’d say the village is just a brilliant example of how short people were back in the olden days, because being only 5’7”, i had to bend over to pass through almost every door they had. anyway, there were a bunch of cool things over there, such as a whole building dedicated to radios and record players, an old temple dedicated to shiva and an old muslim household that i like to call “habibi house” because there was arabic writing on the walls. but it was 35 degrees out there and i was sweating BUCKETS.
+                    </p>
+                    <p class="spaced-line">
+                        the realization that i’ve probably made these blogs way too long has hit me. almost none of you guys are gonna read all this. so i’ll be splitting this entry into two parts. stay tuned for part 2 coming tomorrow :)
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -589,7 +605,6 @@
             swaz things (a website by sai srinivas)
         </p>
         <nav class="flex text-sm sm:text-base md:text-lg uppercase tracking-wider font-light">
-            <!-- link colors are black on mac background -->
             <a href="index.html" class="hover:text-gray-600 transition-colors duration-200 px-2 text-black">home</a>
             <span class="px-2 text-black">·</span>
             <a href="blog.html" class="text-black transition-colors duration-200 px-2 font-normal">blog</a>
@@ -616,22 +631,19 @@
             }
         }).toDestination();
 
-        /**
-         * Plays a short, sharp digital click sound.
-         */
         function playClickSound() {
             if (Tone.context.state !== 'running') {
                 Tone.start();
             }
             // Trigger a slightly lower frequency (D5) for a more mechanical "click" feel
-            clickSynth.triggerAttackRelease("D5", "32n"); 
+            clickSynth.triggerAttackRelease("F4", "32n"); 
         }
 
         // Get references to key elements
         const noEntrySelectedMessage = document.getElementById('noEntrySelected');
 
         // List of all diary entry content IDs - UPDATED
-        const allDiaryEntryContentDivs = ['entry1', 'entry3', 'entry4', 'entry5', 'entry6', 'entry7'];
+        const allDiaryEntryContentDivs = ['entry1', 'entry2', 'entry3', 'entry4', 'entry5', 'entry6', 'entry7'];
 
         /**
          * Displays a specific content section and updates the active link in the grid.
